@@ -86,38 +86,34 @@ Example structure:
 // @access  Private
 const generateChapterContent = async (req, res) => {
   try {
-    const { chapterTitle, chapterDescription, style } = req.body;
+    const { title, existingContent } = req.body;
 
-    if (!chapterTitle) {
+    if (!title) {
       return res
         .status(400)
         .json({ message: "Please provide a chapter title" });
     }
 
     const prompt = `
-You are an expert writer specializing in ${style} content. Write a complete chapter for a book with the following specifications:
+You are an expert writer. Write additional content for a book chapter with the following specifications:
 
-Chapter Title: "${chapterTitle}"
-${chapterDescription ? `Chapter Description: "${chapterDescription}"` : ""}
-Writing Style: ${style}
-Target Length: Comprehensive and detailed (aim for 1500-2500 words)
+Chapter Title: "${title}"
+Existing Content: "${existingContent || ''}"
 
 Requirements:
-1. Write in a ${style.toLowerCase()} tone throughout the chapter
-2. Structure the content with clear sections and smooth transitions
-3. Include relevant examples, explanations, or anecdotes as appropriate
-4. Ensure the content flows logically from introduction to conclusion
-5. Make the content engaging and valuable to readers
-${chapterDescription ? "6. Cover all points mentioned in the chapter description" : ""}
+1. Write in a professional and engaging tone
+2. Generate 300-500 words of new content that complements the existing content
+3. Structure the content with clear paragraphs and smooth transitions
+4. Include relevant examples, explanations, or anecdotes as appropriate
+5. Ensure the content flows logically and adds value to the chapter
+6. If existing content is provided, build upon it naturally
 
 Format Guidelines:
-- Start with a compelling opening paragraph
-- Use clear paragraph breaks for readability
-- Include subheadings if appropriate
-- End with a strong conclusion or transition to the next chapter
 - Write in plain text without markdown formatting
+- Start directly with the new content
+- Do not repeat the chapter title or existing content
 
-Begin writing the chapter content now:
+Begin writing the additional chapter content now:
 `;
 
     // Call the AI model
@@ -126,7 +122,7 @@ Begin writing the chapter content now:
       contents: prompt,
     });
 
-    res.status(200).json({ content: response.text });
+    res.status(200).json({ generatedText: response.text });
   } catch (error) {
     console.error("Error generating chapter:", error);
     res.status(500).json({
