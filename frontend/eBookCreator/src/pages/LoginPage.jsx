@@ -24,7 +24,8 @@ const LoginPage = () => {
     setIsLoading(true);
     try {
       const response = await axiosInstance.post(API_PATHS.AUTH.LOGIN, formData);
-      login(response.data.user);
+      const { token, _id, name, email } = response.data;
+      login({ _id, name, email }, token);
       toast.success("Login successful!");
       navigate("/dashboard");
     } catch (error) {
