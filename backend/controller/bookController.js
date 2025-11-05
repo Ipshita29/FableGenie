@@ -5,7 +5,7 @@ const Book = require("../models/Book");
 // @access  Private
 const createBook = async (req, res) => {
   try {
-    const { title, author, description, cover } = req.body;
+    const { title, author, subtitle, coverImage, chapters } = req.body;
 
     if (!title || !author) {
       return res.status(400).json({ message: "Please provide title and author" });
@@ -15,8 +15,9 @@ const createBook = async (req, res) => {
       user: req.user.id,
       title,
       author,
-      description,
-      cover,
+      subtitle,
+      coverImage,
+      chapters: chapters || [],
     });
 
     res.status(201).json({
@@ -69,7 +70,7 @@ const getBookById = async (req, res) => {
 // @access  Private
 const updateBook = async (req, res) => {
   try {
-    const { title, author, description } = req.body;
+    const { title, author, subtitle, coverImage, chapters, status } = req.body;
     const book = await Book.findById(req.params.id);
 
     if (!book) {
@@ -82,7 +83,10 @@ const updateBook = async (req, res) => {
 
     book.title = title || book.title;
     book.author = author || book.author;
-    book.description = description || book.description;
+    book.subtitle = subtitle || book.subtitle;
+    book.coverImage = coverImage || book.coverImage;
+    book.chapters = chapters || book.chapters;
+    book.status = status || book.status;
 
     const updatedBook = await book.save();
     res.json({
