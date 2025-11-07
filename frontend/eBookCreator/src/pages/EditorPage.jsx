@@ -9,7 +9,6 @@ import {
   Eye,
   Edit,
   ArrowLeft,
-  ChevronRight,
   Menu,
   Trash2,
   MoreVertical,
@@ -22,18 +21,19 @@ import axiosInstance from "../utlis/axiosInstance";
 import { API_PATHS } from "../utlis/apiPaths";
 import Button from "../components/ui/Button"; 
 
+// 1. Confirm Modal (Updated Styling)
 const ConfirmModal = ({ isOpen, onConfirm, onClose, title, message }) => {
   if (!isOpen) return null;
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white p-6 rounded-lg shadow-xl max-w-sm w-full">
-        <h3 className="text-lg font-semibold mb-2">{title}</h3>
-        <p className="text-gray-600 mb-4">{message}</p>
+    <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 backdrop-blur-sm">
+      <div className="bg-white p-8 rounded-xl shadow-2xl max-w-sm w-full border border-gray-100">
+        <h3 className="text-xl font-bold text-gray-900 mb-2">{title}</h3>
+        <p className="text-gray-600 mb-6">{message}</p>
         <div className="flex justify-end gap-3">
-          <Button onClick={onClose} variant="secondary">
+          <Button onClick={onClose} variant="secondary" className="border border-gray-300 text-gray-700 hover:bg-gray-100">
             Cancel
           </Button>
-          <Button onClick={onConfirm} variant="danger">
+          <Button onClick={onConfirm} className="bg-rose-600 hover:bg-rose-700 shadow-md shadow-rose-200">
             Confirm
           </Button>
         </div>
@@ -58,6 +58,7 @@ const EditorPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [chapterToDeleteIndex, setChapterToDeleteIndex] = useState(null);
   const autoSaveRef = useRef(null);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false); // State for mobile sidebar
 
   // Helper function to update book state and set unsaved changes
   const updateBookState = useCallback((newBook) => {
@@ -196,6 +197,7 @@ const EditorPage = () => {
     setEditingChapterTitleIndex(null); // Close any active renaming
     setSelectedChapterIndex(index);
     setIsPreviewMode(false);
+    setIsSidebarOpen(false); // Close sidebar on mobile after selection
   };
 
   // ✅ Update content as user types
@@ -271,7 +273,7 @@ const EditorPage = () => {
   if (isLoading || !book) {
     return (
       <div className="flex justify-center items-center h-screen bg-gray-50">
-        <Loader2 className="w-8 h-8 text-indigo-600 animate-spin mr-3" />
+        <Loader2 className="w-8 h-8 text-rose-600 animate-spin mr-3" />
         <p className="text-xl text-gray-600">Loading Book Editor...</p>
       </div>
     );
@@ -280,7 +282,7 @@ const EditorPage = () => {
   const currentChapter =
     book.chapters?.[selectedChapterIndex] || { title: "Untitled", content: "" };
   
-  // Custom Chapter Item Component for Sidebar
+  // Custom Chapter Item Component for Sidebar (Updated Styling)
   const ChapterItem = ({ chapter, index, isSelected, onSelect, onStartRename, onRename, onDelete, isRenaming }) => {
     const [titleInput, setTitleInput] = useState(chapter.title || `Untitled Chapter`);
     const inputRef = useRef(null);
@@ -304,10 +306,10 @@ const EditorPage = () => {
 
     return (
         <div 
-            className={`flex items-center w-full p-2 rounded-lg transition-colors duration-150 relative ${
+            className={`flex items-center w-full p-3 rounded-xl transition-colors duration-150 relative ${
                 isSelected
-                    ? "bg-indigo-600 text-white shadow-md font-semibold"
-                    : "text-gray-700 hover:bg-gray-100"
+                    ? "bg-rose-500 text-white shadow-md shadow-rose-200 font-semibold" // Rose Accent
+                    : "text-gray-700 hover:bg-rose-50" // Subtle rose hover
             }`}
         >
             <button
@@ -324,7 +326,8 @@ const EditorPage = () => {
                         onChange={(e) => setTitleInput(e.target.value)}
                         onBlur={() => onRename(index, titleInput)}
                         onKeyDown={handleKeyDown}
-                        className={`bg-transparent border-b ${isSelected ? 'border-white/50 text-white' : 'border-gray-400 text-gray-800'} focus:outline-none w-full ml-1`}
+                        // Input Styling in Sidebar
+                        className={`bg-transparent border-b ${isSelected ? 'border-white/50 text-white' : 'border-rose-300 text-gray-800'} focus:outline-none w-full ml-1`}
                         style={{ width: 'calc(100% - 30px)' }}
                     />
                 ) : (
@@ -339,22 +342,23 @@ const EditorPage = () => {
                         e.stopPropagation();
                         setIsMenuOpen(!isMenuOpen);
                     }}
-                    className={`p-1 rounded-full ${isSelected ? 'hover:bg-indigo-700' : 'hover:bg-gray-200'}`}
+                    className={`p-1 rounded-full ${isSelected ? 'hover:bg-rose-600' : 'hover:bg-rose-100'}`}
                     title="Chapter Options"
                 >
                     <MoreVertical size={16} />
                 </button>
                 
                 {isMenuOpen && (
-                    <div className={`absolute right-0 mt-2 w-40 bg-white border border-gray-200 rounded-lg shadow-lg z-20 ${isSelected ? 'bg-indigo-50 border-indigo-200' : ''}`}>
+                    // Menu Styling
+                    <div className={`absolute right-0 mt-2 w-40 bg-white border border-gray-200 rounded-lg shadow-lg z-20`}>
                         <button
                             onClick={(e) => {
                                 e.stopPropagation();
-                                setTitleInput(chapter.title); // Reset input state before editing
+                                setTitleInput(chapter.title); 
                                 onStartRename(index);
                                 setIsMenuOpen(false);
                             }}
-                            className="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-t-lg"
+                            className="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 hover:bg-rose-50 rounded-t-lg"
                         >
                             <Pencil size={14} /> Rename
                         </button>
@@ -376,153 +380,173 @@ const EditorPage = () => {
         </div>
     );
   };
-
-
+  
+  // --- MAIN LAYOUT START ---
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
-      <ConfirmModal 
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onConfirm={confirmDelete}
-        title="Confirm Deletion"
-        message="Are you sure you want to delete this chapter? This action cannot be undone."
-      />
+    // Overall Layout: Subtle gray background, full height
+    <div className="flex h-screen overflow-hidden bg-gray-50">
+      
+      {/* Mobile Overlay */}
+      {isSidebarOpen && (
+        <div className="md:hidden fixed inset-0 bg-black opacity-50 z-20" onClick={() => setIsSidebarOpen(false)}></div>
+      )}
 
-      {/* Header */}
-      <header className="flex justify-between items-center px-6 py-4 bg-white shadow-lg sticky top-0 z-20 border-b border-indigo-100">
-        <div className="flex items-center gap-5">
-          <button
-            onClick={() => {
-              if (hasUnsavedChanges) handleSave(true);
-              navigate(-1);
-            }}
-            className="flex items-center gap-2 text-indigo-600 hover:text-indigo-800 transition p-2 rounded-lg bg-indigo-50"
-            title="Back to Dashboard"
-          >
-            <ArrowLeft size={18} /> <span className="hidden sm:inline">Back</span>
-          </button>
-          <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
-            <NotebookText size={24} className="text-indigo-600" />
-            <span className="truncate max-w-xs">{book.title}</span>
-          </h2>
-          {hasUnsavedChanges && (
-            <span className="text-xs px-2 py-1 bg-orange-100 text-orange-700 rounded-full font-medium animate-pulse">
-              Unsaved
-            </span>
-          )}
-        </div>
-        <div className="flex gap-3 items-center">
-          <Button
-            onClick={() => setIsPreviewMode(!isPreviewMode)}
-            icon={isPreviewMode ? Edit : Eye}
-            variant="secondary"
-            className="hidden sm:flex"
-            disabled={editingChapterTitleIndex !== null}
-          >
-            {isPreviewMode ? "Edit" : "Preview"}
-          </Button>
-          <Button
-            onClick={() => handleSave(true)}
-            icon={Save}
-            isLoading={isSaving}
-            disabled={!hasUnsavedChanges || isGenerating || editingChapterTitleIndex !== null}
-          >
-            {isSaving ? "Saving..." : "Save Now"}
-          </Button>
-        </div>
-      </header>
-
-      {/* Main Content */}
-      <div className="flex flex-1 overflow-hidden">
-        {/* Sidebar */}
-        <aside className="w-64 bg-white border-r border-gray-200 p-4 flex-shrink-0 overflow-y-auto shadow-inner">
-          <h3 className="text-lg font-bold text-gray-800 mb-4 flex justify-between items-center border-b pb-2">
-            <Menu size={20} className="text-indigo-600 mr-2" />
-            Book Chapters
+      {/* 2. Sidebar (Chapter Navigation) - Modern Styling */}
+      <div 
+        className={`flex-shrink-0 w-72 bg-white border-r border-rose-100 p-4 transition-transform duration-300 ease-in-out z-30
+          fixed inset-y-0 left-0 md:static md:translate-x-0 ${isSidebarOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full'}
+          flex flex-col h-full`}
+      >
+        <div className="flex justify-between items-center pb-4 border-b border-rose-100 mb-4">
+            {/* Back to Dashboard Button */}
             <button
-              onClick={handleAddChapter}
-              className="text-indigo-600 hover:text-indigo-800 p-1 rounded-full hover:bg-indigo-100 transition"
-              title="Add New Chapter"
+                onClick={() => navigate("/dashboard")}
+                className="flex items-center text-sm font-semibold text-gray-700 hover:text-rose-600 transition"
             >
-              <PlusCircle size={24} />
+                <ArrowLeft size={16} className="mr-1" />
+                Back to Dashboard
             </button>
-          </h3>
-          <div className="space-y-2">
-            {book.chapters?.map((ch, index) => (
-              <ChapterItem
-                  key={index}
-                  chapter={ch}
-                  index={index}
-                  isSelected={index === selectedChapterIndex}
-                  isRenaming={index === editingChapterTitleIndex}
-                  onSelect={handleSelectChapter}
-                  onStartRename={handleStartRename}
-                  onRename={handleConfirmRename}
-                  onDelete={handleDeleteChapter}
-              />
-            ))}
-          </div>
-        </aside>
+            <button className="md:hidden text-gray-600 hover:text-rose-600" onClick={() => setIsSidebarOpen(false)}>
+                <Menu size={20} />
+            </button>
+        </div>
+        
+        <h2 className="text-lg font-extrabold text-gray-900 mb-3 flex items-center gap-2">
+          <NotebookText size={20} className="text-rose-500" />
+          {book.title || "Untitled Book"}
+        </h2>
 
-        {/* Editor / Preview */}
-        <main className="flex-1 p-6 bg-gray-50 overflow-y-auto">
-          <div className="max-w-5xl mx-auto min-h-full">
-            <div className="flex justify-between items-center p-4 bg-white rounded-t-xl border-b border-gray-200 sticky top-0 z-10 shadow-sm">
-              <h3 className="text-xl font-extrabold text-indigo-700">
-                Chapter: {currentChapter.title}
-              </h3>
-              <p className="text-md font-medium text-gray-600">
-                Chapter {selectedChapterIndex + 1} of {book.chapters?.length || 0}
-              </p>
-            </div>
+        {/* Chapter List */}
+        <div className="flex-1 overflow-y-auto space-y-2 pr-1">
+          {book.chapters.map((chapter, index) => (
+            <ChapterItem
+              key={index}
+              chapter={chapter}
+              index={index}
+              isSelected={index === selectedChapterIndex}
+              onSelect={handleSelectChapter}
+              onStartRename={handleStartRename}
+              onRename={handleConfirmRename}
+              onDelete={handleDeleteChapter}
+              isRenaming={index === editingChapterTitleIndex}
+            />
+          ))}
+        </div>
 
-            <div className="bg-white rounded-b-xl shadow-lg p-6">
-                {isPreviewMode ? (
-                  <div className="prose max-w-none p-4 rounded-xl border border-gray-200 min-h-[500px] text-gray-800">
-                    <ReactMarkdown>
-                      {currentChapter.content || "**Start writing this amazing chapter...**"}
-                    </ReactMarkdown>
-                  </div>
-                ) : (
-                  <div data-color-mode="light" className="w-full">
-                    <MDEditor
-                      value={currentChapter.content}
-                      onChange={handleChangeChapter}
-                      height={600}
-                      preview="edit" // Force edit mode for a focused writing experience
-                      commandsFilter={(command) => {
-                          // Filter out some commands to simplify the toolbar if needed
-                          // Example: if (command.key === 'fullscreen') return false;
-                          return command;
-                      }}
-                      style={{
-                        backgroundColor: "#ffffff", // Pure white editor background
-                        color: "#1f2937", // Dark gray text
-                        borderRadius: "0.75rem",
-                        border: "1px solid #e5e7eb", // Light gray border
-                      }}
-                    />
-                  </div>
-                )}
-            </div>
+        {/* Add Chapter Button */}
+        <div className="mt-4 pt-4 border-t border-rose-100">
+          <Button
+            onClick={handleAddChapter}
+            variant="ghost"
+            className="w-full text-rose-600 hover:bg-rose-50 border border-rose-200"
+          >
+            <PlusCircle size={18} className="mr-2" />
+            Add New Chapter
+          </Button>
+        </div>
+      </div>
+
+      {/* 3. Main Editor Area */}
+      <div className="flex-1 flex flex-col overflow-y-auto">
+        
+        {/* Top Bar / Toolbar */}
+        <header className="flex-shrink-0 bg-white border-b border-rose-100 shadow-sm p-4 sticky top-0 z-10">
+          <div className="flex justify-between items-center">
             
-            <div className="flex justify-end items-center mt-6">
+            {/* Chapter Title / Mobile Menu */}
+            <div className="flex items-center">
+                <button className="md:hidden p-2 text-gray-700 hover:text-rose-600 mr-3" onClick={() => setIsSidebarOpen(true)}>
+                    <Menu size={20} />
+                </button>
+                <h1 className="text-xl font-bold text-gray-900 truncate max-w-xs md:max-w-none">
+                    {currentChapter.title}
+                </h1>
+            </div>
+
+
+            {/* Actions */}
+            <div className="flex items-center gap-3">
+              
+              {/* Preview Toggle Button */}
+              <Button
+                onClick={() => setIsPreviewMode(!isPreviewMode)}
+                variant={isPreviewMode ? 'primary' : 'secondary'}
+                className={isPreviewMode ? 'bg-rose-500 hover:bg-rose-600 shadow-md shadow-rose-200' : 'text-gray-700 hover:bg-gray-100'}
+              >
+                {isPreviewMode ? <Edit size={18} className="mr-2" /> : <Eye size={18} className="mr-2" />}
+                {isPreviewMode ? "Edit Mode" : "Preview"}
+              </Button>
+
+              {/* AI Generator Button */}
               <Button
                 onClick={handleGenerate}
-                icon={Sparkles}
                 isLoading={isGenerating}
-                variant="primary" // Use the primary style for AI generation
-                className="group bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg"
-                disabled={isGenerating || editingChapterTitleIndex !== null}
+                className="bg-purple-600 hover:bg-purple-700 shadow-md shadow-purple-200" // Unique accent for AI
+                disabled={isGenerating || isPreviewMode}
               >
-                <span className="group-hover:animate-pulse">
-                  {isGenerating ? "Generating Content..." : "Generate Next Section (AI)"}
-                </span>
+                {isGenerating ? "Generating..." : "Generate with AI"}
+                <Sparkles size={18} className="ml-2" />
+              </Button>
+
+              {/* Save Button */}
+              <Button
+                onClick={() => handleSave(true)}
+                isLoading={isSaving}
+                className="bg-gray-800 hover:bg-gray-900 shadow-md text-white" 
+                disabled={isSaving || !hasUnsavedChanges}
+              >
+                {isSaving ? (
+                  "Saving..."
+                ) : (
+                  <>
+                    <Save size={18} className="mr-2" />
+                    {hasUnsavedChanges ? "Save Changes" : "Saved"}
+                  </>
+                )}
               </Button>
             </div>
           </div>
-        </main>
+        </header>
+
+        {/* Editor/Preview Content Area */}
+        <div className="flex-1 p-6 md:p-8 overflow-y-auto">
+          <div className="max-w-4xl mx-auto w-full">
+            {isPreviewMode ? (
+              // Preview Mode Styling
+              <div 
+                data-color-mode="light" 
+                className="wmde-markdown-var bg-white p-8 rounded-xl shadow-xl border border-rose-100 min-h-[70vh] prose lg:prose-lg"
+              >
+                <ReactMarkdown>{currentChapter.content}</ReactMarkdown>
+              </div>
+            ) : (
+              // Editor Mode Styling (MDEditor styling is tricky; mostly controlled by its theme/props)
+              <div className="w-full h-full" data-color-mode="light">
+                <MDEditor
+                  value={currentChapter.content}
+                  onChange={handleChangeChapter}
+                  height={window.innerHeight - 200} // Dynamic height
+                  // Custom MDEditor Styling Classes (Applies to container)
+                  className="rounded-xl shadow-xl border border-rose-100" 
+                  textareaProps={{
+                    placeholder: "Start writing your chapter content here...",
+                  }}
+                  previewOptions={{
+                    className: "prose lg:prose-lg"
+                  }}
+                />
+              </div>
+            )}
+          </div>
+        </div>
       </div>
+      <ConfirmModal
+        isOpen={isModalOpen}
+        onConfirm={confirmDelete}
+        onClose={() => setIsModalOpen(false)}
+        title="Delete Chapter"
+        message="Are you sure you want to delete this chapter? This action cannot be undone."
+      />
     </div>
   );
 };

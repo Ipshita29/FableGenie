@@ -73,28 +73,37 @@ const ProfilePage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-2xl mx-auto bg-white p-8 rounded-xl shadow-lg">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">My Profile</h1>
-          <p className="text-gray-600">Manage your account information</p>
+    // FIX: Removed min-h-screen from here and rely on parent Layout. 
+    // Added flex properties to ensure vertical centering of the content card itself.
+    // Background: Subtle off-white/gray gradient
+    <div className="flex justify-center items-start pt-12 pb-12 w-full min-h-[calc(100vh-6rem)] bg-gray-50/70">
+      
+      {/* Container: Centered, modern styling with subtle rose accents */}
+      <div className="max-w-3xl w-full bg-white p-10 rounded-3xl shadow-2xl shadow-gray-200/50 border border-gray-100">
+        <div className="text-center mb-10">
+          {/* Title: Clean, professional heading */}
+          <h1 className="text-4xl font-extrabold text-gray-900 mb-2">My Profile</h1>
+          <p className="text-lg text-gray-500">Review and update your personal details</p>
         </div>
 
-        <div className="flex flex-col md:flex-row items-center md:items-start gap-8">
+        {/* Layout: Consistent gap */}
+        <div className="flex flex-col md:flex-row items-center md:items-start gap-10">
           {/* Avatar Section */}
-          <div className="flex flex-col items-center">
+          <div className="flex flex-col items-center p-4 bg-gray-50 rounded-xl border border-gray-100">
+            {/* Avatar: Muted rose ring */}
             <img
               src={user.avatar || '/default-avatar.png'}
               alt="Avatar"
-              className="w-24 h-24 rounded-full border-4 border-violet-200 object-cover mb-4"
+              className="w-28 h-28 rounded-full border-4 border-rose-300/50 object-cover mb-4 transition-transform duration-300 hover:scale-[1.03]"
             />
-            <div className="text-center">
-              <div className="flex items-center gap-2 text-sm text-gray-500 mb-1">
-                <Calendar size={16} />
+            <div className="text-center space-y-2">
+              <div className="flex items-center gap-2 text-sm text-gray-500 font-medium">
+                <Calendar size={16} className="text-rose-500" /> {/* Muted rose icon */}
                 <span>Joined {formatDate(currentUser.createdAt)}</span>
               </div>
               {currentUser.isPro && (
-                <span className="inline-block bg-gradient-to-r from-violet-400 to-violet-500 text-white px-3 py-1 rounded-full text-xs font-medium">
+                // Pro Member Badge: Subtle rose gradient
+                <span className="inline-block bg-gradient-to-r from-rose-500 to-rose-600 text-white px-3 py-1 rounded-full text-xs font-bold shadow-md shadow-rose-200">
                   Pro Member
                 </span>
               )}
@@ -102,54 +111,80 @@ const ProfilePage = () => {
           </div>
 
           {/* Profile Info Section */}
-          <div className="flex-1 w-full">
-            <div className="space-y-6">
-              {/* Name Field */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Full Name
-                </label>
-                {isEditing ? (
-                  <div className="flex gap-3">
-                    <InputField
-                      icon={User}
-                      name="name"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      placeholder="Enter your name"
-                      className="flex-1"
-                    />
-                    <Button onClick={handleSave} isLoading={isLoading} size="sm">
-                      Save
-                    </Button>
-                    <Button variant="secondary" onClick={handleCancel} size="sm">
-                      Cancel
-                    </Button>
-                  </div>
-                ) : (
-                  <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                    <div className="flex items-center gap-3">
-                      <User size={20} className="text-gray-400" />
-                      <span className="text-lg font-semibold text-gray-900">{currentUser.name}</span>
-                    </div>
-                    <Button variant="ghost" size="sm" onClick={() => setIsEditing(true)}>
-                      <Edit size={16} />
-                    </Button>
-                  </div>
-                )}
-              </div>
-
-              {/* Email Field */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Email Address
-                </label>
-                <div className="flex items-center p-3 bg-gray-50 rounded-lg">
-                  <Mail size={20} className="text-gray-400 mr-3" />
-                  <span className="text-gray-900">{currentUser.email}</span>
+          <div className="flex-1 w-full space-y-8">
+            {/* Name Field */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                Full Name
+              </label>
+              {isEditing ? (
+                // Editing State
+                <div className="flex gap-3 items-center">
+                  <InputField
+                    icon={User}
+                    name="name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="Enter your name"
+                    className="flex-1 border-gray-300 focus:border-rose-500" // Rose focus
+                  />
+                  <Button 
+                    onClick={handleSave} 
+                    isLoading={isLoading} 
+                    size="sm" 
+                    // Save Button: Muted rose
+                    className="bg-rose-600 hover:bg-rose-700 shadow-md shadow-rose-200" 
+                  >
+                    Save
+                  </Button>
+                  <Button 
+                    variant="secondary" 
+                    onClick={handleCancel} 
+                    size="sm"
+                    className="border border-gray-300 text-gray-700 hover:bg-gray-100" 
+                  >
+                    Cancel
+                  </Button>
                 </div>
-                <p className="text-xs text-gray-500 mt-1">Email cannot be changed</p>
+              ) : (
+                // Display State: Clean background, subtle rose border on hover
+                <div className="flex items-center justify-between p-4 bg-gray-50 border border-gray-200 rounded-xl transition duration-300 hover:border-rose-300">
+                  <div className="flex items-center gap-3">
+                    <User size={20} className="text-rose-500" /> {/* Muted rose icon */}
+                    <span className="text-lg font-bold text-gray-900">{currentUser.name}</span>
+                  </div>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    onClick={() => setIsEditing(true)}
+                    className="text-rose-600 hover:bg-rose-50" // Muted rose edit button
+                  >
+                    <Edit size={16} />
+                  </Button>
+                </div>
+              )}
+            </div>
+
+            {/* Email Field */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                Email Address
+              </label>
+              {/* Display State */}
+              <div className="flex items-center p-4 bg-gray-50 border border-gray-200 rounded-xl">
+                <Mail size={20} className="text-rose-500 mr-3" /> {/* Muted rose icon */}
+                <span className="text-gray-900 font-medium">{currentUser.email}</span>
               </div>
+              <p className="text-xs text-gray-500 mt-2 ml-1">
+                <span className="font-semibold text-rose-600">Note:</span> Email cannot be changed here.
+              </p>
+            </div>
+
+            {/* Placeholder for future sections */}
+            <div className="pt-4 border-t border-gray-100">
+                <p className="text-sm text-gray-500">
+                    Need help? Contact support for advanced account changes.
+                </p>
             </div>
           </div>
         </div>

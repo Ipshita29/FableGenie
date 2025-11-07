@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Album } from "lucide-react";
+import { BookOpen } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import ProfileDropdown from "./ProfileDropdown";
@@ -27,11 +27,11 @@ const DashboardLayout = ({ children }) => {
         <div className="flex justify-between items-center px-6 py-4">
           {/* Left - Logo */}
           <Link to="/dashboard" className="flex items-center gap-2">
-            <div className="bg-yellow-500 p-2 rounded-lg">
-              <Album className="w-5 h-5 text-white" />
+            <div className="w-10 h-10 bg-gradient-to-br from-rose-400 to-rose-600 flex items-center justify-center rounded-lg shadow-md">
+              <BookOpen className="w-5 h-5 text-white" />
             </div>
             <span className="font-semibold text-gray-800 text-lg">
-              AI eBook Creator
+              FableGenie
             </span>
           </Link>
 
