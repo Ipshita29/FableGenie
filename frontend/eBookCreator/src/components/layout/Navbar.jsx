@@ -1,6 +1,7 @@
 import { useAuth } from "../../context/AuthContext";
 import ProfileDropdown from "./ProfileDropdown";
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { Menu, X, BookOpen } from "lucide-react";
 
 const navLinks = [
@@ -29,14 +30,14 @@ const Navbar = () => {
         <div className="flex items-center justify-between h-20">
 
           {/* Logo */}
-          <a href="/" className="flex items-center space-x-3 group">
+          <Link to="/" className="flex items-center space-x-3 group">
             <div className="w-10 h-10 bg-gradient-to-br from-rose-400 to-rose-600 flex items-center justify-center rounded-lg shadow-md">
               <BookOpen className="w-5 h-5 text-white" />
             </div>
             <span className="text-xl font-bold text-gray-900 tracking-tight">
               FableGenie
             </span>
-          </a>
+          </Link>
 
           {/* Desktop Auth/Profile */}
           <div className="hidden lg:flex items-center space-x-3">
@@ -55,18 +56,18 @@ const Navbar = () => {
               />
             ) : (
               <>
-                <a
-                  href="/login"
+                <Link
+                  to="/login"
                   className="px-5 py-2.5 text-gray-700 font-medium hover:text-pink-600 transition"
                 >
                   Login
-                </a>
-                <a
-                  href="/signup"
+                </Link>
+                <Link
+                  to="/signup"
                   className="px-5 py-2.5 bg-pink-600 text-white rounded-xl font-semibold shadow-lg shadow-pink-300/50 hover:bg-pink-700 transition"
                 >
                   Get Started
-                </a>
+                </Link>
               </>
             )}
           </div>
@@ -85,29 +86,29 @@ const Navbar = () => {
       {isOpen && (
         <nav className="lg:hidden px-6 pb-4 space-y-2 bg-pink-50">
           {navLinks.map((link) => (
-            <a
+            <Link
               key={link.name}
-              href={link.href}
+              to={link.href}
               className="block py-2 text-gray-700 hover:text-pink-600 transition font-medium"
             >
               {link.name}
-            </a>
+            </Link>
           ))}
 
           {!isAuthenticated && (
             <>
-              <a
-                href="/login"
+              <Link
+                to="/login"
                 className="block mt-4 px-4 py-2 text-gray-700 font-medium hover:text-pink-600 text-center"
               >
                 Login
-              </a>
-              <a
-                href="/signup"
+              </Link>
+              <Link
+                to="/signup"
                 className="block mt-2 px-4 py-2 bg-pink-600 text-white rounded-xl font-semibold hover:bg-pink-700 text-center"
               >
                 Get Started
-              </a>
+              </Link>
             </>
           )}
         </nav>

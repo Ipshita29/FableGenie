@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { LogOut, User, Mail } from "lucide-react";
 
 const ProfileDropdown = ({ isOpen, onToggle, avatar, companyName, email, onLogout }) => {
@@ -31,8 +32,10 @@ const ProfileDropdown = ({ isOpen, onToggle, avatar, companyName, email, onLogou
 
           <ul className="mt-2">
             <li className="px-4 py-2 hover:bg-gray-50 flex items-center space-x-2 cursor-pointer">
-              <User size={18} />
-              <span>View Profile</span>
+              <Link to="/profile" className="flex items-center space-x-2">
+                <User size={18} />
+                <span>View Profile</span>
+              </Link>
             </li>
             <li
               onClick={onLogout}

@@ -89,6 +89,7 @@ exports.getProfile = async (req, res) => {
       email: user.email,
       avatar: user.avatar,
       isPro: user.isPro,
+      createdAt: user.createdAt,
     });
   } catch (error) {
     console.error(error);

@@ -4,9 +4,11 @@ import { Edit, Trash } from "lucide-react";
 
 const BookCard = ({ book, onDelete }) => {
   const navigate = useNavigate();
+
+  // ✅ Use the cover image if available, otherwise a local fallback
   const coverImageUrl = book.coverImage
     ? `${BASE_URL}/backend${book.coverImage}`.replace(/\\/g, "/")
-    : "https://via.placeholder.com/300x400?text=No+Cover";
+    : "/no-cover.png"; // local image in public folder
 
   return (
     <div
@@ -17,11 +19,9 @@ const BookCard = ({ book, onDelete }) => {
       <div className="relative w-full h-56 bg-gray-100">
         <img
           src={coverImageUrl}
-          alt={book.title}
+          alt={book.title || "No cover"}
           className="w-full h-full object-cover"
-          onError={(e) => {
-            e.target.src = "https://via.placeholder.com/300x400?text=No+Cover";
-          }}
+          onError={(e) => (e.target.src = "/no-cover.png")} // fallback if image fails
         />
 
         {/* Edit & Delete buttons */}

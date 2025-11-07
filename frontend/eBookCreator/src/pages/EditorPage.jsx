@@ -18,14 +18,10 @@ import {
 } from "lucide-react";
 import MDEditor from "@uiw/react-md-editor";
 import ReactMarkdown from "react-markdown";
-
-// Assumed imports - ensure these paths are correct in your project
 import axiosInstance from "../utlis/axiosInstance";
 import { API_PATHS } from "../utlis/apiPaths";
-import Button from "../components/ui/Button"; // Reusable Button component
-// import ConfirmModal from "../components/ui/ConfirmModal"; // Assumed simple confirmation modal component
+import Button from "../components/ui/Button"; 
 
-// Placeholder for a simple ConfirmModal. You should replace this with your actual component.
 const ConfirmModal = ({ isOpen, onConfirm, onClose, title, message }) => {
   if (!isOpen) return null;
   return (
@@ -46,7 +42,6 @@ const ConfirmModal = ({ isOpen, onConfirm, onClose, title, message }) => {
   );
 };
 
-// --- Main Component ---
 
 const EditorPage = () => {
   const { bookId } = useParams();
@@ -70,7 +65,6 @@ const EditorPage = () => {
     setHasUnsavedChanges(true);
   }, []);
 
-  // ✅ Fetch book on mount
   useEffect(() => {
     const fetchBook = async () => {
       try {
