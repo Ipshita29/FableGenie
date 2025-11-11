@@ -18,7 +18,7 @@ router.use(protect);
 
 // Create & Get all books
 router.route("/")
-  .post(createBook)
+  .post(upload, createBook)
   .get(getBooks);
 
 // Update book cover (with image upload)

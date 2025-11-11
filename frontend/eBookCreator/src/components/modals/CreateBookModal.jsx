@@ -29,6 +29,8 @@ const CreateBookModal = ({ isOpen, onClose, onBookCreated }) => {
   const [chapters, setChapters] = useState([]);
   const [isGeneratingOutline, setIsGeneratingOutline] = useState(false);
   const [isFinalizingBook, setIsFinalizingBook] = useState(false);
+  const [coverImage, setCoverImage] = useState(null);
+  const [coverPreview, setCoverPreview] = useState(null);
  
   const chaptersContainerRef = useRef(null);
 
@@ -41,6 +43,8 @@ const CreateBookModal = ({ isOpen, onClose, onBookCreated }) => {
     setChapters([]);
     setIsGeneratingOutline(false);
     setIsFinalizingBook(false);
+    setCoverImage(null);
+    setCoverPreview(null);
   };
 
   const handleGenerateOutline = async () => {
@@ -90,6 +94,16 @@ const CreateBookModal = ({ isOpen, onClose, onBookCreated }) => {
     ]);
   };
 
+  const handleCoverImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setCoverImage(file);
+      const reader = new FileReader();
+      reader.onload = () => setCoverPreview(reader.result);
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handleFinalizeBook = async () => {
     if (!bookTitle||chapters.length===0){
       toast.error("Book title and at least one chapter are required")
@@ -97,19 +111,27 @@ const CreateBookModal = ({ isOpen, onClose, onBookCreated }) => {
     }
     setIsFinalizingBook(true)
     try{
-      const response = await axiosInstance.post(API_PATHS.BOOKS.CREATE_BOOK,{
-        title:bookTitle,
-        author:user.name || "Unknown Author",
-        chapters:chapters
-      })
+      const formData = new FormData();
+      formData.append('title', bookTitle);
+      formData.append('author', user.name || "Unknown Author");
+      formData.append('chapters', JSON.stringify(chapters));
+      if (coverImage) {
+        formData.append('coverImage', coverImage);
+      }
+
+      const response = await axiosInstance.post(API_PATHS.BOOKS.CREATE_BOOK, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
       toast.success("eBook created successfully!")
-      onBookCreated(response.data._id)
+      onBookCreated(response.data.book._id)
       onClose()
       resetModal()
     }
     catch(error){console.log("TESR__",bookTitle,chapters)
       toast.error(
-      error.response?.data?.message || "Failed to generate outline."
+      error.response?.data?.message || "Failed to create eBook."
     )
     }
     finally{
@@ -139,58 +161,80 @@ const CreateBookModal = ({ isOpen, onClose, onBookCreated }) => {
             title="Create New eBook"
             >
             {step===1 && (
-              <div className="">
-              <div className="">
-                <div className="">
-                  <div className="">1</div>
-                  <div className=""></div>
-                  <div className="">2</div>
+              <div className="space-y-6">
+                <div className="flex items-center justify-center space-x-4">
+                  <div className="flex items-center space-x-2">
+                    <div className="w-8 h-8 flex items-center justify-center bg-green-500 text-white rounded-full font-bold">
+                      1
+                    </div>
+                    <div className="w-16 h-1 bg-gray-300"></div>
+                    <div className="w-8 h-8 flex items-center justify-center bg-gray-300 text-gray-600 rounded-full font-bold">
+                      2
+                    </div>
+                  </div>
+                </div>
+                <InputField
+                  icon={BookOpen}
+                  label="Book Title"
+                  placeholder="Enter your book title..."
+                  value={bookTitle}
+                  onChange={(e)=>setBookTitle(e.target.value)}
+                />
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Cover Image (Optional)
+                  </label>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleCoverImageChange}
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+                  />
+                  {coverPreview && (
+                    <div className="mt-4">
+                      <img
+                        src={coverPreview}
+                        alt="Cover preview"
+                        className="w-32 h-48 object-cover rounded-lg shadow-md"
+                      />
+                    </div>
+                  )}
+                </div>
+                <InputField
+                  icon={Hash}
+                  label="Number of Chapters"
+                  type="number"
+                  placeholder="5"
+                  value={numChapters}
+                  onChange={(e)=>setNumChapters(parseInt(e.target.value)||1)}
+                />
+                <InputField
+                  icon={Lightbulb}
+                  label="Topic (Optional)"
+                  placeholder="Specific Topic for AI generation..."
+                  value={aiTopic}
+                  onChange={(e)=>setAiTopic(e.target.value)}
+                />
+                <SelectField
+                  icon={Palette}
+                  label="Writing Style"
+                  value={aiStyle}
+                  onChange={(e)=>setAiStyle(e.target.value)}
+                  options={[
+                    "Informative",
+                    "StoryTelling",
+                    "Casual",
+                    "Professional",
+                    "Humorous"
+                  ]}/>
+                <div className="flex justify-center">
+                  <Button onClick={handleGenerateOutline}
+                    isLoading={isGeneratingOutline}
+                    icon={Sparkles}>
+                    Generate Outline with AI
+                  </Button>
                 </div>
               </div>
-              <InputField
-              icon={BookOpen}
-              label="Book Title"
-              placeholder="Enter your book title..."
-              value={bookTitle}
-              onChange={(e)=>setBookTitle(e.target.value)}
-              />
-               <InputField
-              icon={Hash}
-              label="Number of Chapters"
-              type="number"
-              placeholder="5"
-              value={numChapters}
-              onChange={(e)=>setNumChapters(parseInt(e.target.value)||1)}
-              />
-               <InputField
-              icon={Lightbulb}
-              label="Topic (Optional)"
-              placeholder="Specific Topic for AI generation..."
-              value={aiTopic}
-              onChange={(e)=>setAiTopic(e.target.value)}
-              />
-              <SelectField
-              icon={Palette}
-              label="Writing Style"
-              value={aiStyle}
-              onChange={(e)=>setAiStyle(e.target.value)}
-              options={[
-                "Informative",
-                "StoryTelling",
-                "Casual",
-                "Professional",
-                "Humorous"
-              ]}/>
-              <div className="">
-                <Button onClick={handleGenerateOutline}
-                isLoading={isGeneratingOutline}
-                icon={Sparkles}>
-                  Generate Outline with AI
-                </Button>
-              </div>
-              </div>
-
-              
             )}
             {step === 2 && (
             <div className="space-y-6">

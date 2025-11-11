@@ -61,8 +61,9 @@ const ViewBookPage = () => {
     );
 
   const coverImage = book.coverImage
-    ? `${BASE_URL}/backend${book.coverImage}`.replace(/\\/g, "/")
-    : "/no-cover.png";
+  ? `${BASE_URL}${book.coverImage}`.replace(/\\/g, "/")
+  : "/no-cover.png";
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-white via-pink-50 to-pink-100">
@@ -210,7 +211,7 @@ const ViewBookPage = () => {
                 ),
               }}
             >
-              {chapter.content || "_This chapter is empty._"}
+              {chapter.content || chapter.description || "_This chapter is empty._"}
             </ReactMarkdown>
           ) : (
             <div className="text-center text-gray-500 py-16">No chapter content available</div>

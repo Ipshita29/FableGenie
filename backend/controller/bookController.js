@@ -1,14 +1,30 @@
 const Book = require("../models/Book");
+const mongoose = require("mongoose");
 
 // @desc    Create a new book
 // @route   POST /api/books
 // @access  Private
 const createBook = async (req, res) => {
   try {
-    const { title, author, subtitle, coverImage, chapters } = req.body;
+    const { title, author, subtitle, chapters } = req.body;
 
     if (!title || !author) {
       return res.status(400).json({ message: "Please provide title and author" });
+    }
+
+    let coverImage = null;
+    if (req.file) {
+      coverImage = `/uploads/${req.file.filename}`;
+    }
+
+    // Parse chapters if it's a string (from FormData)
+    let parsedChapters = chapters;
+    if (typeof chapters === 'string') {
+      try {
+        parsedChapters = JSON.parse(chapters);
+      } catch (parseError) {
+        return res.status(400).json({ message: "Invalid chapters format" });
+      }
     }
 
     const book = await Book.create({
@@ -17,7 +33,7 @@ const createBook = async (req, res) => {
       author,
       subtitle,
       coverImage,
-      chapters: chapters || [],
+      chapters: parsedChapters || [],
     });
 
     res.status(201).json({
@@ -48,7 +64,13 @@ const getBooks = async (req, res) => {
 // @access  Private
 const getBookById = async (req, res) => {
   try {
-    const book = await Book.findById(req.params.id);
+    const { id } = req.params;
+
+    if (!id || !mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: "Invalid book ID" });
+    }
+
+    const book = await Book.findById(id);
 
     if (!book) {
       return res.status(404).json({ message: "Book not found" });

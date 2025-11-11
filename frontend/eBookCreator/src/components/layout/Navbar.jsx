@@ -1,6 +1,6 @@
+import { useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import ProfileDropdown from "./ProfileDropdown";
-import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Menu, X, BookOpen } from "lucide-react";
 
@@ -12,17 +12,8 @@ const navLinks = [
 ];
 
 const Navbar = () => {
-  const { user, logout, isAuthenticated } = useAuth();
+  const { user, isAuthenticated } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
-  const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
-
-  useEffect(() => {
-    const handleClickOutside = () => {
-      if (profileDropdownOpen) setProfileDropdownOpen(false);
-    };
-    document.addEventListener("click", handleClickOutside);
-    return () => document.removeEventListener("click", handleClickOutside);
-  }, [profileDropdownOpen]);
 
   return (
     <header className="bg-gradient-to-r from-white to-pink-50/50 border-b border-pink-100/70">
@@ -43,16 +34,7 @@ const Navbar = () => {
           <div className="hidden lg:flex items-center space-x-3">
             {isAuthenticated ? (
               <ProfileDropdown
-                isOpen={profileDropdownOpen}
-                onToggle={(e) => {
-                  e.stopPropagation();
-                  setProfileDropdownOpen(!profileDropdownOpen);
-                }}
-                avatar={user?.avatar || ""}
                 companyName={user?.name || ""}
-                email={user?.email || ""}
-                userRole={user?.role || ""}
-                onLogout={logout}
               />
             ) : (
               <>

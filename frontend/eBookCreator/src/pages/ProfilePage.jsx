@@ -91,11 +91,9 @@ const ProfilePage = () => {
           {/* Avatar Section */}
           <div className="flex flex-col items-center p-4 bg-gray-50 rounded-xl border border-gray-100">
             {/* Avatar: Muted rose ring */}
-            <img
-              src={user.avatar || '/default-avatar.png'}
-              alt="Avatar"
-              className="w-28 h-28 rounded-full border-4 border-rose-300/50 object-cover mb-4 transition-transform duration-300 hover:scale-[1.03]"
-            />
+            <div className="w-28 h-28 rounded-full border-4 border-rose-300/50 bg-gradient-to-br from-pink-400 to-pink-600 flex items-center justify-center text-white font-bold text-4xl mb-4 transition-transform duration-300 hover:scale-[1.03]">
+              {currentUser.name ? currentUser.name.charAt(0).toUpperCase() : "U"}
+            </div>
             <div className="text-center space-y-2">
               <div className="flex items-center gap-2 text-sm text-gray-500 font-medium">
                 <Calendar size={16} className="text-rose-500" /> {/* Muted rose icon */}
