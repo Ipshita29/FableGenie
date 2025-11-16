@@ -137,7 +137,7 @@ const updateBookCover = async (req, res) => {
       return res.status(401).json({ message: "Not authorized" });
     }
 
-    book.cover = cover || book.cover;
+    book.coverImage = cover || book.coverImage;
     const updatedBook = await book.save();
 
     res.json({
