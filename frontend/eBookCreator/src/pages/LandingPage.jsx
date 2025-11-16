@@ -5,15 +5,14 @@ import { ArrowRight, Sparkles, BookOpen, Zap, PenTool, Layout, Gift, Facebook, T
 import ProfileDropdown from '../components/layout/ProfileDropdown';
 import image1 from "../assets/image1.png"
 import image2 from "../assets/image2.png"
-
-
+import ebookToolkitBg from '../assets/ebookToolkitBg.png'; 
 const EnhancedFeatureCard = ({ icon: Icon, title, description }) => (
-  <div className="bg-white p-8 rounded-2xl shadow-xl hover:shadow-2xl transition duration-500 border border-gray-100 transform hover:-translate-y-1 group">
+  <div className="bg-white/70 backdrop-blur-sm p-8 rounded-2xl shadow-xl hover:shadow-2xl transition duration-500 border border-pink-100 transform hover:-translate-y-1 group relative z-10">
     <div className="w-14 h-14 bg-pink-50 text-pink-600 rounded-full flex items-center justify-center mb-6 ring-4 ring-pink-100 group-hover:bg-pink-100 transition">
       <Icon className="w-7 h-7" />
     </div>
     <h3 className="text-xl font-extrabold text-gray-900 mb-2">{title}</h3>
-    <p className="text-gray-600 text-base">{description}</p>
+    <p className="text-gray-700 text-base">{description}</p>
   </div>
 );
 
@@ -33,7 +32,6 @@ const LandingPage = () => {
   const { user, isAuthenticated } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  // Data for Navbar and Footer
   const navLinks = [
     { name: "Home", href: "/" },
     { name: "About", href: "/about" },
@@ -202,14 +200,27 @@ const LandingPage = () => {
           </div>
         </section>
 
-        {/* --- Section 2: Features --- */}
-        <section className="py-24 bg-gray-50">
-          <div className="max-w-7xl mx-auto px-6 lg:px-8">
+        {/* --- Section 2: Features (with Background Image) --- */}
+        <section
+          className="py-24 relative overflow-hidden"
+          style={{
+            backgroundImage: `url(${ebookToolkitBg})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundAttachment: 'fixed' // Makes the background parallax scroll
+          }}
+        >
+          {/* Overlay to ensure text readability */}
+          <div className="absolute inset-0 bg-black opacity-40 z-0"></div> 
+          <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent z-0"></div> 
+
+
+          <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10"> {/* z-10 for content to be above overlay */}
             <div className="text-center mb-16">
-              <h2 className="text-4xl sm:text-5xl font-extrabold text-gray-900 tracking-tight">
+              <h2 className="text-4xl sm:text-5xl font-extrabold text-white tracking-tight drop-shadow-lg"> {/* Text white with shadow */}
                 Your Complete Ebook Creation Toolkit
               </h2>
-              <p className="text-xl text-gray-600 mt-4 max-w-4xl mx-auto">
+              <p className="text-xl text-pink-100 mt-4 max-w-4xl mx-auto drop-shadow"> {/* Lighter pink text with shadow */}
                 We eliminate the busywork so you can focus 100% on sharing your message with the world.
               </p>
             </div>

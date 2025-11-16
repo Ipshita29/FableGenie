@@ -192,7 +192,7 @@ const exportAsDocument = async (req, res) => {
   try {
     const book = await Book.findById(req.params.id);
     if (!book) return res.status(404).json({ message: "Book not found" });
-    if (book.userId.toString() !== req.user._id.toString())
+    if (book.user.toString() !== req.user._id.toString())
       return res.status(401).json({ message: "Not authorized" });
 
     const sections = [];
@@ -308,7 +308,7 @@ const exportAsPDF = async (req, res) => {
   try {
     const book = await Book.findById(req.params.id);
     if (!book) return res.status(404).json({ message: "Book not found" });
-    if (book.userId.toString() !== req.user._id.toString())
+    if (book.user.toString() !== req.user._id.toString())
       return res.status(401).json({ message: "Not authorized" });
 
     const pdfDoc = new PDFDocument({ margin: 50 });

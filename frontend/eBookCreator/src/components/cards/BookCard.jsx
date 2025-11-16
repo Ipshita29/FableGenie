@@ -1,6 +1,9 @@
 import { useNavigate } from "react-router-dom";
 import { BASE_URL } from "../../utlis/apiPaths";
-import { Edit, Trash } from "lucide-react";
+import { Edit, Trash, Download } from "lucide-react";
+import axiosInstance from "../../utlis/axiosInstance";
+import { API_PATHS } from "../../utlis/apiPaths";
+import toast from "react-hot-toast";
 
 const BookCard = ({ book, onDelete }) => {
   const navigate = useNavigate();
@@ -8,6 +11,34 @@ const BookCard = ({ book, onDelete }) => {
   const coverImageUrl = book.coverImage
     ? `${BASE_URL}${book.coverImage}`.replace(/\\/g, "/")
     : "/no-cover.png";
+
+  const handleDownloadPDF = async (e) => {
+    e.stopPropagation();
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axiosInstance.get(
+        `${API_PATHS.EXPORT.PDF}/${book._id}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+          responseType: "blob",
+        }
+      );
+
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", `${book.title || "Untitled"}.pdf`);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
+
+      toast.success("PDF downloaded successfully!");
+    } catch (error) {
+      console.error("Download error:", error);
+      toast.error("Failed to download PDF");
+    }
+  };
 
   return (
     <div
@@ -49,11 +80,11 @@ const BookCard = ({ book, onDelete }) => {
               navigate(`/editor/${book._id}`);
             }}
             className="
-              backdrop-blur-md bg-white/70 
-              hover:bg-white 
-              text-gray-700 
-              p-2 rounded-lg 
-              shadow-lg 
+              backdrop-blur-md bg-white/70
+              hover:bg-white
+              text-gray-700
+              p-2 rounded-lg
+              shadow-lg
               transition
             "
             title="Edit Book"
@@ -62,16 +93,31 @@ const BookCard = ({ book, onDelete }) => {
           </button>
 
           <button
+            onClick={handleDownloadPDF}
+            className="
+              backdrop-blur-md bg-white/70
+              hover:bg-white
+              text-blue-500
+              p-2 rounded-lg
+              shadow-lg
+              transition
+            "
+            title="Download PDF"
+          >
+            <Download size={16} />
+          </button>
+
+          <button
             onClick={(e) => {
               e.stopPropagation();
               onDelete(book._id);
             }}
             className="
-              backdrop-blur-md bg-white/70 
-              hover:bg-white 
-              text-red-500 
-              p-2 rounded-lg 
-              shadow-lg 
+              backdrop-blur-md bg-white/70
+              hover:bg-white
+              text-red-500
+              p-2 rounded-lg
+              shadow-lg
               transition
             "
             title="Delete Book"
