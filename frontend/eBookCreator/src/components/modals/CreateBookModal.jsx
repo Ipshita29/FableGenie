@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { BookOpen, Hash, Lightbulb, Palette, Sparkles } from "lucide-react";
 import Modal from "../ui/Modal";
-import InputField from "../ui/InputField";
 import SelectField from "../ui/SelectField";
 import Button from "../ui/Button";
 import axiosInstance from "../../utlis/axiosInstance";
@@ -87,13 +86,24 @@ const CreateBookModal = ({ isOpen, onClose, onBookCreated }) => {
       title="Create New eBook"
     >
       <div className="space-y-6">
-        <InputField
-          icon={BookOpen}
-          label="Book Title"
-          placeholder="Enter your book title..."
-          value={bookTitle}
-          onChange={(e) => setBookTitle(e.target.value)}
-        />
+        {/* Book Title Input */}
+        <div className="space-y-2">
+          <label className="block text-sm font-medium text-gray-700">
+            Book Title
+          </label>
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <BookOpen className="w-5 h-5 text-gray-400" />
+            </div>
+            <input
+              type="text"
+              placeholder="Enter your book title..."
+              value={bookTitle}
+              onChange={(e) => setBookTitle(e.target.value)}
+              className="w-full h-11 px-3 py-2 pl-10 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-violet-400 focus:border-transparent bg-white text-gray-900"
+            />
+          </div>
+        </div>
 
         <div>
           <label className="block text-sm font-semibold text-gray-700 mb-2">
@@ -114,22 +124,43 @@ const CreateBookModal = ({ isOpen, onClose, onBookCreated }) => {
           )}
         </div>
 
-        <InputField
-          icon={Hash}
-          label="Number of Chapters"
-          type="number"
-          placeholder="5"
-          value={numChapters}
-          onChange={(e) => setNumChapters(parseInt(e.target.value) || 1)}
-        />
+        {/* Number of Chapters Input */}
+        <div className="space-y-2">
+          <label className="block text-sm font-medium text-gray-700">
+            Number of Chapters
+          </label>
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <Hash className="w-5 h-5 text-gray-400" />
+            </div>
+            <input
+              type="number"
+              placeholder="5"
+              value={numChapters}
+              onChange={(e) => setNumChapters(parseInt(e.target.value) || 1)}
+              className="w-full h-11 px-3 py-2 pl-10 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-violet-400 focus:border-transparent bg-white text-gray-900"
+            />
+          </div>
+        </div>
 
-        <InputField
-          icon={Lightbulb}
-          label="Topic (Optional)"
-          placeholder="Specific topic for the book..."
-          value={aiTopic}
-          onChange={(e) => setAiTopic(e.target.value)}
-        />
+        {/* Topic Input */}
+        <div className="space-y-2">
+          <label className="block text-sm font-medium text-gray-700">
+            Topic (Optional)
+          </label>
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <Lightbulb className="w-5 h-5 text-gray-400" />
+            </div>
+            <input
+              type="text"
+              placeholder="Specific topic for the book..."
+              value={aiTopic}
+              onChange={(e) => setAiTopic(e.target.value)}
+              className="w-full h-11 px-3 py-2 pl-10 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-violet-400 focus:border-transparent bg-white text-gray-900"
+            />
+          </div>
+        </div>
 
         <SelectField
           icon={Palette}

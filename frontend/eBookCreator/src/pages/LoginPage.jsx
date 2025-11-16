@@ -1,19 +1,19 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Mail, Lock, BookOpen, LogIn } from "lucide-react";
+import { Mail, Lock, BookOpen, LogIn, Eye, EyeOff } from "lucide-react";
 import toast from "react-hot-toast";
 
-import InputField from "../components/ui/InputField";
 import Button from "../components/ui/Button";
 import { useAuth } from "../context/AuthContext";
 import axiosInstance from "../utlis/axiosInstance";
 import { API_PATHS } from "../utlis/apiPaths";
 
-import Login from "../assets/login.png";   
+import Login from "../assets/login.png";
 
 const LoginPage = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
 
@@ -61,25 +61,52 @@ const LoginPage = () => {
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
-        <InputField
-          type="email"
-          name="email"
-          placeholder="Email"
-          icon={Mail}
-          value={formData.email}
-          onChange={handleChange}
-          required
-        />
+        {/* Email Input */}
+        <div className="space-y-2">
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <Mail className="w-5 h-5 text-gray-400" />
+            </div>
+            <input
+              type="email"
+              name="email"
+              placeholder="Email"
+              value={formData.email}
+              onChange={handleChange}
+              required
+              className="w-full h-11 px-3 py-2 pl-10 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-violet-400 focus:border-transparent bg-white text-gray-900"
+            />
+          </div>
+        </div>
 
-        <InputField
-          type="password"
-          name="password"
-          placeholder="Password"
-          icon={Lock}
-          value={formData.password}
-          onChange={handleChange}
-          required
-        />
+        {/* Password Input */}
+        <div className="space-y-2">
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <Lock className="w-5 h-5 text-gray-400" />
+            </div>
+            <input
+              type={showPassword ? "text" : "password"}
+              name="password"
+              placeholder="Password"
+              value={formData.password}
+              onChange={handleChange}
+              required
+              className="w-full h-11 px-3 py-2 pl-10 pr-10 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-violet-400 focus:border-transparent bg-white text-gray-900"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600"
+            >
+              {showPassword ? (
+                <EyeOff className="w-5 h-5" />
+              ) : (
+                <Eye className="w-5 h-5" />
+              )}
+            </button>
+          </div>
+        </div>
 
         <Button
           type="submit"

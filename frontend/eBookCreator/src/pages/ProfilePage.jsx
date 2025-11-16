@@ -3,7 +3,6 @@ import { useAuth } from "../context/AuthContext";
 import axiosInstance from "../utlis/axiosInstance";
 import { API_PATHS } from "../utlis/apiPaths";
 
-import InputField from "../components/ui/InputField";
 import Button from "../components/ui/Button";
 
 import { User, Mail, Calendar, Edit, Save, X } from "lucide-react"; // Added Save and X icons
@@ -109,14 +108,22 @@ const ProfilePage = () => {
           <div className="text-center mb-6">
             {isEditing ? (
               <div className="flex flex-col gap-3 items-center">
-                <InputField
-                  icon={User}
-                  name="name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="Enter new name"
-                  className="w-full"
-                />
+                {/* Name Input */}
+                <div className="space-y-2 w-full">
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                      <User className="w-5 h-5 text-gray-400" />
+                    </div>
+                    <input
+                      type="text"
+                      name="name"
+                      placeholder="Enter new name"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      className="w-full h-11 px-3 py-2 pl-10 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-violet-400 focus:border-transparent bg-white text-gray-900"
+                    />
+                  </div>
+                </div>
                 <div className="flex gap-2 w-full justify-center">
                   <Button
                     onClick={handleSave}
