@@ -8,7 +8,7 @@ const generateToken =(id)=>{
     })
 }
 
-//@desc register new user
+//@desc register new userß
 //@route POST /api/auth/register
 //@access public
 exports.registerUser = async (req, res) => {

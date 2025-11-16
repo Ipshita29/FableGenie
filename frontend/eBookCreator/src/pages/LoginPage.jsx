@@ -1,13 +1,15 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Mail, Lock, BookOpen } from "lucide-react";
+import { Mail, Lock, BookOpen, LogIn } from "lucide-react";
 import toast from "react-hot-toast";
 
-import InputField from "../components/ui/InputField"; 
+import InputField from "../components/ui/InputField";
 import Button from "../components/ui/Button";
 import { useAuth } from "../context/AuthContext";
 import axiosInstance from "../utlis/axiosInstance";
 import { API_PATHS } from "../utlis/apiPaths";
+
+import Login from "../assets/login.png";   
 
 const LoginPage = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -37,43 +39,82 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-50">
-      <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md">
-        <div className="flex flex-col items-center">
-          <BookOpen className="w-12 h-12 text-yellow-500 mb-2" />
-          <h1 className="text-2xl font-bold">Welcome Back!</h1>
+    <div className="flex min-h-screen bg-rose-950 text-white">
+      
+      {/* LEFT PANEL */}
+      <div className="hidden lg:flex flex-col items-center justify-center w-1/2 p-10 bg-rose-900 relative overflow-hidden shadow-2xl">
+
+        {/* Background image */}
+        <div
+          className="absolute inset-0 bg-cover bg-center opacity-40"
+          style={{ backgroundImage: `url(${Login})` }}   // ✅ FIXED
+        />
+
+        {/* Content */}
+        <div className="relative z-10 text-center">
+          <LogIn className="w-16 h-16 text-pink-300 mb-4 animate-pulse" />
+          <h1 className="text-5xl font-extrabold tracking-tight text-pink-200">
+            Welcome Back!
+          </h1>
+          <p className="mt-3 text-pink-100 text-xl font-light">
+            Log in and continue writing and reading.
+          </p>
         </div>
+      </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <InputField
-            type="email"
-            name="email"
-            placeholder="Email"
-            icon={Mail} // pass the component itself, NOT <Mail />
-            value={formData.email}
-            onChange={handleChange}
-            required
-          />
-          <InputField
-            type="password"
-            name="password"
-            placeholder="Password"
-            icon={Lock} // pass the component itself
-            value={formData.password}
-            onChange={handleChange}
-            required
-          />
-          <Button type="submit" disabled={isLoading}>
-            {isLoading ? "Logging in..." : "Login"}
-          </Button>
-        </form>
+      {/* RIGHT PANEL */}
+      <div className="flex items-center justify-center w-full lg:w-1/2 p-6">
+        <div className="w-full max-w-md p-10 bg-rose-900 rounded-2xl shadow-2xl border border-rose-700/50">
+          
+          <div className="flex flex-col items-center mb-8">
+            <BookOpen className="w-10 h-10 text-pink-400 mb-3" />
+            <h2 className="text-3xl font-bold text-pink-200">Log in to your Account</h2>
+          </div>
 
-        <p className="text-sm text-center text-gray-500">
-          Don't have an account?{" "}
-          <Link to="/signup" className="text-yellow-500 font-medium">
-            SignUp
-          </Link>
-        </p>
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <InputField
+              type="email"
+              name="email"
+              placeholder="Email"
+              icon={Mail}
+              value={formData.email}
+              onChange={handleChange}
+              required
+            />
+
+            <InputField
+              type="password"
+              name="password"
+              placeholder="Password"
+              icon={Lock}
+              value={formData.password}
+              onChange={handleChange}
+              required
+            />
+
+            <Button
+              type="submit"
+              disabled={isLoading}
+              className="w-full bg-pink-500 hover:bg-pink-600 text-white font-bold py-3 rounded-xl shadow-lg shadow-pink-500/30 transition-all duration-200"
+            >
+              {isLoading ? (
+                <>
+                  <LogIn className="w-4 h-4 mr-2 animate-spin" /> Logging in...
+                </>
+              ) : (
+                "Login"
+              )}
+            </Button>
+          </form>
+
+          <p className="text-sm text-center text-pink-200 mt-8">
+            Don't have an account?{" "}
+            <Link to="/signup" className="text-pink-400 font-semibold hover:text-pink-300 transition-colors">
+              Sign Up
+            </Link>
+          </p>
+
+        </div>
       </div>
     </div>
   );
