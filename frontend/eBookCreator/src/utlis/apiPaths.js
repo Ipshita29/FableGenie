@@ -7,6 +7,7 @@ export const API_PATHS = {
   },
   BOOKS: {
     CREATE_BOOK: "/api/books",
+    CREATE_TEMPLATE_BOOK: "/api/books/template",
     GET_BOOKS: "/api/books",
     GET_BOOK_BY_ID: "/api/books", // Usually you'd append `/:id` when fetching by ID
     UPDATE_BOOK: "/api/books",

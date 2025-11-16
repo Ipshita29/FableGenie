@@ -3,6 +3,7 @@ const router = express.Router();
 
 const {
   createBook,
+  createTemplateBook,
   getBooks,
   getBookById,
   updateBook,
@@ -20,6 +21,10 @@ router.use(protect);
 router.route("/")
   .post(upload, createBook)
   .get(getBooks);
+
+// Create template book with AI outline
+router.route("/template")
+  .post(upload, createTemplateBook);
 
 // Update book cover (with image upload)
 router.route("/cover/:id").put(upload, updateBookCover);
