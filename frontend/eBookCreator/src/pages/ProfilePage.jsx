@@ -3,9 +3,7 @@ import { useAuth } from "../context/AuthContext";
 import axiosInstance from "../utlis/axiosInstance";
 import { API_PATHS } from "../utlis/apiPaths";
 
-import Button from "../components/ui/Button";
-
-import { User, Mail, Calendar, Edit, Save, X } from "lucide-react"; // Added Save and X icons
+import { User, Mail, Calendar, Edit, Save, X, Loader2 } from "lucide-react"; // Added Save and X icons
 
 import ProfileBg from "../assets/profile.png"; // your image
 
@@ -125,22 +123,27 @@ const ProfilePage = () => {
                   </div>
                 </div>
                 <div className="flex gap-2 w-full justify-center">
-                  <Button
+                  <button
                     onClick={handleSave}
-                    className="flex-1 max-w-[120px] justify-center"
-                    isLoading={isLoading}
-                    icon={Save}
+                    disabled={isLoading}
+                    className="inline-flex items-center justify-center font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none whitespace-nowrap flex-1 max-w-[120px] bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white px-4 py-2.5 h-11 rounded-xl shadow-lg shadow-pink-300/50"
                   >
-                    Save
-                  </Button>
-                  <Button
+                    {isLoading ? (
+                      <Loader2 className="w-5 h-5 animate-spin text-white" />
+                    ) : (
+                      <>
+                        <Save className="w-5 h-5 mr-2" />
+                        Save
+                      </>
+                    )}
+                  </button>
+                  <button
                     onClick={handleCancel}
-                    className="flex-1 max-w-[120px] justify-center"
-                    variant="secondary"
-                    icon={X}
+                    className="inline-flex items-center justify-center font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none whitespace-nowrap flex-1 max-w-[120px] bg-gray-100 hover:bg-pink-50 text-gray-700 border border-gray-200 px-4 py-2.5 h-11 rounded-xl"
                   >
+                    <X className="w-5 h-5 mr-2" />
                     Cancel
-                  </Button>
+                  </button>
                 </div>
               </div>
             ) : (

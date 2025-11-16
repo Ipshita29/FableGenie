@@ -1,8 +1,5 @@
 import { useState } from "react";
-import { BookOpen, Hash, Lightbulb, Palette, Sparkles } from "lucide-react";
-import Modal from "../ui/Modal";
-import SelectField from "../ui/SelectField";
-import Button from "../ui/Button";
+import { BookOpen, Hash, Lightbulb, Palette, Sparkles, X, Loader2 } from "lucide-react";
 import axiosInstance from "../../utlis/axiosInstance";
 import { API_PATHS } from "../../utlis/apiPaths";
 import toast from "react-hot-toast";
@@ -77,15 +74,28 @@ const CreateBookModal = ({ isOpen, onClose, onBookCreated }) => {
   };
 
   return (
-    <Modal
-      isOpen={isOpen}
-      onClose={() => {
-        onClose();
-        resetModal();
-      }}
-      title="Create New eBook"
-    >
-      <div className="space-y-6">
+    isOpen && (
+      <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black/40 backdrop-blur-sm">
+        {/* Modal Box */}
+        <div className="bg-white rounded-2xl shadow-lg w-full max-w-lg p-6 relative">
+          {/* Close Button */}
+          <button
+            onClick={() => {
+              onClose();
+              resetModal();
+            }}
+            className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 transition"
+          >
+            <X size={22} />
+          </button>
+
+          {/* Title */}
+          <h3 className="text-xl font-semibold text-gray-800 mb-4 text-center">
+            Create New eBook
+          </h3>
+
+          {/* Modal Content */}
+          <div className="space-y-6">
         {/* Book Title Input */}
         <div className="space-y-2">
           <label className="block text-sm font-medium text-gray-700">
@@ -162,25 +172,72 @@ const CreateBookModal = ({ isOpen, onClose, onBookCreated }) => {
           </div>
         </div>
 
-        <SelectField
-          icon={Palette}
-          label="Writing Style"
-          value={aiStyle}
-          onChange={(e) => setAiStyle(e.target.value)}
-          options={["Informative", "StoryTelling", "Casual", "Professional", "Humorous"]}
-        />
+            {/* Writing Style Select */}
+            <div className="space-y-2">
+              <label
+                htmlFor="writingStyle"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Writing Style
+              </label>
 
-        <div className="flex justify-center">
-          <Button
-            onClick={handleCreateBook}
-            isLoading={isCreating}
-            icon={Sparkles}
-          >
-            {isCreating ? "Creating..." : "Create Template"}
-          </Button>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <Palette className="h-5 w-5 text-gray-400" />
+                </div>
+
+                <select
+                  id="writingStyle"
+                  name="writingStyle"
+                  value={aiStyle}
+                  onChange={(e) => setAiStyle(e.target.value)}
+                  className="w-full h-11 px-3 py-2 border border-gray-200 rounded-xl bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none pl-10"
+                >
+                  <option value="Informative">Informative</option>
+                  <option value="StoryTelling">StoryTelling</option>
+                  <option value="Casual">Casual</option>
+                  <option value="Professional">Professional</option>
+                  <option value="Humorous">Humorous</option>
+                </select>
+
+                <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                  <svg
+                    className="h-4 w-4 text-gray-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      d="M7 7l3 3 3-3"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                    />
+                  </svg>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex justify-center">
+              <button
+                onClick={handleCreateBook}
+                disabled={isCreating}
+                className="inline-flex items-center justify-center font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none whitespace-nowrap bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white px-4 py-2.5 h-11 rounded-xl shadow-lg shadow-pink-300/50"
+              >
+                {isCreating ? (
+                  <Loader2 className="w-5 h-5 animate-spin text-white mr-2" />
+                ) : (
+                  <>
+                    <Sparkles className="w-5 h-5 mr-2" />
+                    Create Template
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
         </div>
       </div>
-    </Modal>
+    )
   );
 };
 

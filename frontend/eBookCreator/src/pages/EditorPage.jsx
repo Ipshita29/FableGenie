@@ -20,7 +20,6 @@ import MDEditor from "@uiw/react-md-editor";
 import ReactMarkdown from "react-markdown";
 import axiosInstance from "../utlis/axiosInstance";
 import { API_PATHS } from "../utlis/apiPaths"; // Assuming corrected path
-import Button from "../components/ui/Button"; 
 
 // 1. Confirm Modal (Modernized Styling - Pink Accent)
 const ConfirmModal = ({ isOpen, onConfirm, onClose, title, message }) => {
@@ -32,15 +31,15 @@ const ConfirmModal = ({ isOpen, onConfirm, onClose, title, message }) => {
         <p className="text-gray-600 mb-6">{message}</p>
         <div className="flex justify-end gap-3">
           {/* Using custom Button styling for primary action */}
-          <Button onClick={onClose} variant="secondary" className="border border-gray-300 text-gray-700 hover:bg-gray-100 font-medium">
+          <button onClick={onClose} className="inline-flex items-center justify-center font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none whitespace-nowrap bg-gray-100 hover:bg-pink-50 text-gray-700 border border-gray-200 px-4 py-2.5 h-11 rounded-xl">
             Cancel
-          </Button>
-          <Button 
-            onClick={onConfirm} 
-            className="bg-pink-600 hover:bg-pink-700 shadow-lg shadow-pink-200/50 font-semibold text-white"
+          </button>
+          <button
+            onClick={onConfirm}
+            className="inline-flex items-center justify-center font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none whitespace-nowrap bg-pink-600 hover:bg-pink-700 text-white px-4 py-2.5 h-11 rounded-xl shadow-lg shadow-pink-200/50"
           >
             Confirm Delete
-          </Button>
+          </button>
         </div>
       </div>
     </div>
@@ -445,15 +444,13 @@ const EditorPage = () => {
 
         {/* Add Chapter Button */}
         <div className="mt-6 pt-5 border-t border-gray-700">
-          <Button
+          <button
             onClick={handleAddChapter}
-            variant="ghost"
-            // Button style for dark sidebar
-            className="w-full text-pink-400 hover:bg-gray-700 border border-gray-700 hover:border-pink-500 font-medium"
+            className="inline-flex items-center justify-center font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none whitespace-nowrap w-full bg-transparent hover:bg-gray-700 text-pink-400 hover:text-pink-300 border border-gray-700 hover:border-pink-500 px-4 py-2.5 h-11 rounded-xl"
           >
             <PlusCircle size={18} className="mr-2" />
             Add New Chapter
-          </Button>
+          </button>
         </div>
       </div>
 
@@ -479,46 +476,49 @@ const EditorPage = () => {
             <div className="flex items-center gap-3 flex-shrink-0">
               
               {/* Preview Toggle Button - Clean Toggle Style */}
-              <Button
+              <button
                 onClick={() => setIsPreviewMode(!isPreviewMode)}
-                variant={isPreviewMode ? 'primary' : 'secondary'}
-                className={`transition font-semibold ${isPreviewMode ? 'bg-pink-600 hover:bg-pink-700 text-white shadow-lg shadow-pink-200/50' : 'text-gray-700 hover:bg-gray-100 border border-gray-300'}`}
+                className={`inline-flex items-center justify-center font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none whitespace-nowrap px-4 py-2.5 h-11 rounded-xl ${isPreviewMode ? 'bg-pink-600 hover:bg-pink-700 text-white shadow-lg shadow-pink-200/50' : 'bg-gray-100 hover:bg-pink-50 text-gray-700 border border-gray-200'}`}
               >
                 {isPreviewMode ? <Edit size={18} className="mr-2" /> : <Eye size={18} className="mr-2" />}
                 {isPreviewMode ? "Edit Mode" : "Preview"}
-              </Button>
+              </button>
 
               {/* AI Generator Button - Purple Accent */}
-              <Button
+              <button
                 onClick={handleGenerate}
-                isLoading={isGenerating}
-                className="bg-purple-600 hover:bg-purple-700 shadow-lg shadow-purple-300/50 font-semibold"
                 disabled={isGenerating || isPreviewMode}
+                className="inline-flex items-center justify-center font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none whitespace-nowrap bg-purple-600 hover:bg-purple-700 text-white px-4 py-2.5 h-11 rounded-xl shadow-lg shadow-purple-300/50"
               >
-                {isGenerating ? "Generating..." : "Generate with AI"}
-                <Sparkles size={18} className="ml-2" />
-              </Button>
+                {isGenerating ? (
+                  <Loader2 className="w-5 h-5 animate-spin text-white mr-2" />
+                ) : (
+                  <>
+                    Generate with AI
+                    <Sparkles size={18} className="ml-2" />
+                  </>
+                )}
+              </button>
 
               {/* Save Button - Distinct Accent with Unsaved Indicator */}
-              <Button
+              <button
                 onClick={() => handleSave(true)}
-                isLoading={isSaving}
-                className={`font-semibold ${
-                    hasUnsavedChanges 
-                        ? 'bg-orange-500 hover:bg-orange-600 shadow-lg shadow-orange-200/50' 
-                        : 'bg-green-600 hover:bg-green-700 shadow-lg shadow-green-200/50'
-                } text-white`} 
                 disabled={isSaving || !hasUnsavedChanges}
+                className={`inline-flex items-center justify-center font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none whitespace-nowrap px-4 py-2.5 h-11 rounded-xl ${
+                    hasUnsavedChanges
+                        ? 'bg-orange-500 hover:bg-orange-600 shadow-lg shadow-orange-200/50'
+                        : 'bg-green-600 hover:bg-green-700 shadow-lg shadow-green-200/50'
+                } text-white`}
               >
                 {isSaving ? (
-                  "Saving..."
+                  <Loader2 className="w-5 h-5 animate-spin text-white mr-2" />
                 ) : (
                   <>
                     <Save size={18} className="mr-2" />
                     {hasUnsavedChanges ? "Unsaved Changes" : "Saved"}
                   </>
                 )}
-              </Button>
+              </button>
             </div>
           </div>
         </header>

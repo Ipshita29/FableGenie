@@ -1,10 +1,9 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import { Plus, Book, ArrowLeft } from "lucide-react";
+import { Plus, Book, ArrowLeft, Loader2 } from "lucide-react";
 
 import DashboardLayout from "../components/layout/DashboardLayout";
-import Button from "../components/ui/Button";
 import { useAuth } from "../context/AuthContext";
 import axiosInstance from "../utlis/axiosInstance";
 import { API_PATHS } from "../utlis/apiPaths";
@@ -34,20 +33,19 @@ const ConfirmationModal = ({ isOpen, onClose, onConfirm, title, message }) => {
         <p className="text-gray-600 mb-6">{message}</p>
 
         <div className="flex justify-center gap-3">
-          <Button
-            variant="secondary"
+          <button
             onClick={onClose}
-            className="bg-gray-200 hover:bg-gray-300 text-gray-700"
+            className="inline-flex items-center justify-center font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none whitespace-nowrap bg-gray-100 hover:bg-pink-50 text-gray-700 border border-gray-200 px-4 py-2.5 h-11 rounded-xl"
           >
             Cancel
-          </Button>
+          </button>
 
-          <Button
+          <button
             onClick={onConfirm}
-            className="bg-red-500 hover:bg-red-600 text-white"
+            className="inline-flex items-center justify-center font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none whitespace-nowrap bg-red-600 hover:bg-red-700 text-white px-4 py-2.5 h-11 rounded-xl shadow-md shadow-red-300/50"
           >
             Confirm
-          </Button>
+          </button>
         </div>
       </div>
     </div>
@@ -109,14 +107,13 @@ const DashboardPage = () => {
     {/* Header Section */}
     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-10 gap-4">
       <div className="flex items-center gap-4">
-        <Button
+        <button
           onClick={() => navigate("/")}
-          variant="ghost"
-          className="text-gray-600 hover:text-pink-600 p-2"
           title="Back to Landing Page"
+          className="inline-flex items-center justify-center font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none whitespace-nowrap bg-transparent hover:bg-pink-50 text-pink-600 hover:text-pink-700 p-2 rounded-xl"
         >
           <ArrowLeft size={20} />
-        </Button>
+        </button>
         <div>
           <h1 className="text-3xl font-extrabold text-gray-900">
             Your eBooks
@@ -127,13 +124,13 @@ const DashboardPage = () => {
         </div>
       </div>
 
-      <Button
+      <button
         onClick={handleCreateBookClick}
-        icon={Plus}
-        className="bg-pink-600 hover:bg-pink-700 text-white font-semibold flex items-center gap-2 px-5 py-3 rounded-xl shadow-lg shadow-pink-200/50 transition"
+        className="inline-flex items-center justify-center font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none whitespace-nowrap bg-pink-600 hover:bg-pink-700 text-white px-5 py-3 h-11 rounded-xl shadow-lg shadow-pink-200/50"
       >
+        <Plus className="w-5 h-5 mr-2" />
         Create New eBook
-      </Button>
+      </button>
     </div>
 
     {/* Main Content */}
@@ -151,13 +148,13 @@ const DashboardPage = () => {
           You haven't created any eBooks yet. Start building your first one using AI.
         </p>
 
-        <Button
+        <button
           onClick={handleCreateBookClick}
-          icon={Plus}
-          className="bg-pink-600 hover:bg-pink-700 text-white font-semibold px-6 py-3 rounded-xl shadow-md"
+          className="inline-flex items-center justify-center font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none whitespace-nowrap bg-pink-600 hover:bg-pink-700 text-white px-6 py-3 h-11 rounded-xl shadow-md"
         >
+          <Plus className="w-5 h-5 mr-2" />
           Create Your First eBook
-        </Button>
+        </button>
       </div>
     ) : (
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">

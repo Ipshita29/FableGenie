@@ -1,9 +1,8 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Mail, Lock, BookOpen, UserPlus, User, Eye, EyeOff } from "lucide-react";
+import { Mail, Lock, BookOpen, UserPlus, User, Eye, EyeOff, Loader2 } from "lucide-react";
 import toast from "react-hot-toast";
 
-import Button from "../components/ui/Button";
 import { useAuth } from "../context/AuthContext";
 import axiosInstance from "../utlis/axiosInstance";
 import { API_PATHS } from "../utlis/apiPaths";
@@ -121,19 +120,19 @@ const SignupPage = () => {
             </div>
           </div>
 
-          <Button
+          <button
             type="submit"
             disabled={isLoading}
-            className="w-full bg-pink-600 hover:bg-pink-700 text-white font-semibold py-3 rounded-xl shadow-lg shadow-pink-200/50 transition"
+            className="inline-flex items-center justify-center font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none whitespace-nowrap w-full bg-pink-600 hover:bg-pink-700 text-white px-4 py-3 h-11 rounded-xl shadow-lg shadow-pink-200/50"
           >
             {isLoading ? (
               <>
-                <UserPlus className="w-4 h-4 mr-2 animate-spin" /> Signing up...
+                <Loader2 className="w-5 h-5 mr-2 animate-spin text-white" /> Signing up...
               </>
             ) : (
               "Create Account"
             )}
-          </Button>
+          </button>
         </form>
 
         <p className="text-sm text-center text-gray-600 mt-8">

@@ -13,7 +13,6 @@ import {
 } from "lucide-react";
 import axiosInstance from "../utlis/axiosInstance";
 import { API_PATHS, BASE_URL } from "../utlis/apiPaths";
-import Button from "../components/ui/Button";
 
 const ViewBookPage = () => {
   const { bookId } = useParams();
@@ -63,7 +62,12 @@ const ViewBookPage = () => {
         <p className="text-gray-500 mb-6">
           It may have been removed or doesn’t exist.
         </p>
-        <Button onClick={handleBack}>Back to Dashboard</Button>
+        <button
+          onClick={handleBack}
+          className="inline-flex items-center justify-center font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none whitespace-nowrap bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white px-4 py-2.5 h-11 rounded-xl shadow-lg shadow-pink-300/50"
+        >
+          Back to Dashboard
+        </button>
       </div>
     );
 
@@ -78,25 +82,23 @@ const ViewBookPage = () => {
       <header className="backdrop-blur-xl bg-white/60 border-b border-pink-200 sticky top-0 z-40 shadow-[0_4px_20px_rgba(0,0,0,0.05)]">
         <div className="max-w-7xl mx-auto flex items-center justify-between p-4">
 
-          <Button
+          <button
             onClick={handleBack}
-            variant="ghost"
-            className="flex items-center gap-2 text-pink-600 hover:text-pink-700 transition"
+            className="inline-flex items-center justify-center font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none whitespace-nowrap bg-transparent hover:bg-pink-50 text-pink-600 hover:text-pink-700 px-4 py-2.5 h-11 rounded-xl"
           >
-            <ArrowLeft className="w-4 h-4" /> Back
-          </Button>
+            <ArrowLeft className="w-4 h-4 mr-2" /> Back
+          </button>
 
           <h1 className="text-lg font-semibold truncate max-w-md text-gray-800 tracking-wide">
             {book.title || "Untitled Book"}
           </h1>
 
-          <Button
+          <button
             onClick={handleEdit}
-            variant="secondary"
-            className="flex items-center gap-2 bg-pink-600 hover:bg-pink-700 text-white rounded-xl shadow-lg shadow-pink-300/40 px-4"
+            className="inline-flex items-center justify-center font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none whitespace-nowrap bg-gray-100 hover:bg-pink-50 text-gray-700 border border-gray-200 px-4 py-2.5 h-11 rounded-xl"
           >
-            <Eye className="w-4 h-4" /> Edit
-          </Button>
+            <Eye className="w-4 h-4 mr-2" /> Edit
+          </button>
 
         </div>
       </header>
