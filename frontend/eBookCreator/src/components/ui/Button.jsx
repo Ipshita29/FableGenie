@@ -1,4 +1,5 @@
 import React from "react";
+import { Loader2 } from "lucide-react"; // Use a modern Lucide icon for loading
 
 const Button = ({
   variant = "primary",
@@ -6,51 +7,47 @@ const Button = ({
   isLoading = false,
   children,
   icon: Icon,
+  className = "", // Added className prop for easy overriding
   ...props
 }) => {
   // Define style variants
   const variants = {
-    primary: "bg-gradient-to-r from-violet-400 to-violet-500 hover:from-violet-500 hover:to-violet-600 text-white",
-    secondary: "bg-gray-100 hover:bg-gray-200 text-gray-700",
-    ghost: "bg-transparent hover:bg-gray-100 text-gray-700",
+    // Primary: Pink Gradient with deep shadow
+    primary: "bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white shadow-lg shadow-pink-300/50",
+    
+    // Secondary: Light gray background with a touch of pink on hover
+    secondary: "bg-gray-100 hover:bg-pink-50 text-gray-700 border border-gray-200",
+    
+    // Ghost: Transparent with prominent pink text on hover
+    ghost: "bg-transparent hover:bg-pink-50 text-pink-600 hover:text-pink-700",
+    
+    // Danger (Optional, but useful for delete actions)
+    danger: "bg-red-600 hover:bg-red-700 text-white shadow-md shadow-red-300/50"
   };
 
   // Define sizes
   const sizes = {
     sm: "px-3 py-1.5 text-sm h-8 rounded-lg",
-    md: "px-4 py-2.5 text-sm h-11 rounded-xl",
-    lg: "px-6 py-3 text-base h-12 rounded-xl",
+    md: "px-4 py-2.5 text-base h-11 rounded-xl", // Increased text size slightly
+    lg: "px-6 py-3 text-lg h-12 rounded-xl",     // Increased text size and padding
   };
+
+  // Base styling for all buttons
+  const baseStyle = "inline-flex items-center justify-center font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none whitespace-nowrap";
 
   return (
     <button
-      className={`inline-flex items-center justify-center font-medium transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed ${variants[variant]} ${sizes[size]}`}
-      disabled={isLoading}
+      className={`${baseStyle} ${variants[variant]} ${sizes[size]} ${className}`}
+      disabled={isLoading || props.disabled}
       {...props}
     >
       {isLoading ? (
-        <svg
-          className="w-5 h-5 animate-spin text-white"
-          fill="none"
-          viewBox="0 0 24 24"
-        >
-          <circle
-            className="opacity-25"
-            cx="12"
-            cy="12"
-            r="10"
-            stroke="currentColor"
-            strokeWidth="4"
-          ></circle>
-          <path
-            className="opacity-75"
-            fill="currentColor"
-            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
-          ></path>
-        </svg>
+        // Use the Loader2 icon from Lucide for a cleaner spinner
+        <Loader2 className={`w-5 h-5 animate-spin ${variant === 'secondary' || variant === 'ghost' ? 'text-pink-600' : 'text-white'}`} />
       ) : (
         <>
-          {Icon && <Icon className="w-4 h-4 mr-2" />}
+          {/* Increased icon size for better visibility */}
+          {Icon && <Icon className="w-5 h-5 mr-2" />} 
           {children}
         </>
       )}

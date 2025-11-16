@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import { Plus, Book } from "lucide-react";
+import { Plus, Book, ArrowLeft } from "lucide-react";
 
 import DashboardLayout from "../components/layout/DashboardLayout";
 import Button from "../components/ui/Button";
@@ -108,13 +108,23 @@ const DashboardPage = () => {
 
     {/* Header Section */}
     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-10 gap-4">
-      <div>
-        <h1 className="text-3xl font-extrabold text-gray-900">
-          Your eBooks
-        </h1>
-        <p className="text-gray-600 text-sm mt-1">
-          Create, edit, and manage all your AI-generated eBooks.
-        </p>
+      <div className="flex items-center gap-4">
+        <Button
+          onClick={() => navigate("/")}
+          variant="ghost"
+          className="text-gray-600 hover:text-pink-600 p-2"
+          title="Back to Landing Page"
+        >
+          <ArrowLeft size={20} />
+        </Button>
+        <div>
+          <h1 className="text-3xl font-extrabold text-gray-900">
+            Your eBooks
+          </h1>
+          <p className="text-gray-600 text-sm mt-1">
+            Create, edit, and manage all your AI-generated eBooks.
+          </p>
+        </div>
       </div>
 
       <Button
@@ -128,8 +138,8 @@ const DashboardPage = () => {
 
     {/* Main Content */}
     {isLoading ? (
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-        {Array.from({ length: 6 }).map((_, i) => (
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        {Array.from({ length: 8 }).map((_, i) => (
           <BookCardSkeleton key={i} />
         ))}
       </div>
@@ -150,7 +160,7 @@ const DashboardPage = () => {
         </Button>
       </div>
     ) : (
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
         {books.map((book) => (
           <BookCard
             key={book._id}
