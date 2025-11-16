@@ -103,69 +103,82 @@ const DashboardPage = () => {
   };
 
   return (
-    <DashboardLayout>
-      <div className="p-6">
-        {/* Header Section */}
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-3">
-          <div>
-            <h1 className="text-2xl font-semibold text-gray-800">All eBooks</h1>
-            <p className="text-gray-500 text-sm">
-              Create, edit, and manage all your AI-generated eBooks.
-            </p>
-          </div>
+   <DashboardLayout>
+  <div className="p-6 lg:p-10 bg-gradient-to-br from-white to-pink-50 min-h-screen">
 
-          <Button
-            onClick={handleCreateBookClick}
-            icon={Plus}
-            className="bg-yellow-500 hover:bg-yellow-600 text-white font-medium flex items-center gap-2 px-4 py-2 rounded-xl shadow-md transition-all duration-200"
-          >
-            Create New eBook
-          </Button>
-        </div>
-
-        {/* Main Content */}
-        {isLoading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-            {Array.from({ length: 4 }).map((_, i) => (
-              <BookCardSkeleton key={i} />
-            ))}
-          </div>
-        ) : books.length === 0 ? (
-          <div className="flex flex-col items-center text-center py-16">
-            <Book className="w-12 h-12 text-gray-400 mb-4" />
-            <h3 className="text-lg font-semibold text-gray-700">No eBooks Found</h3>
-            <p className="text-gray-500 mb-6">
-              You haven't created any eBooks yet. Get started by creating your first one.
-            </p>
-            <Button onClick={handleCreateBookClick} icon={Plus}>
-              Create Your First eBook
-            </Button>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-            {books.map((book) => (
-              <BookCard
-                key={book._id}
-                book={book}
-                onDelete={() => setBookToDelete(book._id)}
-              />
-            ))}
-          </div>
-        )}
-        <ConfirmationModal
-          isOpen ={!!bookToDelete}
-          onClose={()=>setBookToDelete(null)}
-          onConfirm={handleDeleteBook}
-          title="Delete eBook"
-          message="Are you sure you want to delete this eBook? This action cannot be undone"
-        />
-        <CreateBookModal
-          isOpen={isCreateModalOpen}
-          onClose={()=>setIsCreateModalOpen(false)}
-          onBookCreated ={handleBookCreated}
-        />
+    {/* Header Section */}
+    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-10 gap-4">
+      <div>
+        <h1 className="text-3xl font-extrabold text-gray-900">
+          Your eBooks
+        </h1>
+        <p className="text-gray-600 text-sm mt-1">
+          Create, edit, and manage all your AI-generated eBooks.
+        </p>
       </div>
-    </DashboardLayout>
+
+      <Button
+        onClick={handleCreateBookClick}
+        icon={Plus}
+        className="bg-pink-600 hover:bg-pink-700 text-white font-semibold flex items-center gap-2 px-5 py-3 rounded-xl shadow-lg shadow-pink-200/50 transition"
+      >
+        Create New eBook
+      </Button>
+    </div>
+
+    {/* Main Content */}
+    {isLoading ? (
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        {Array.from({ length: 6 }).map((_, i) => (
+          <BookCardSkeleton key={i} />
+        ))}
+      </div>
+    ) : books.length === 0 ? (
+      <div className="flex flex-col items-center text-center py-20 bg-white rounded-2xl shadow-md border border-pink-100">
+        <Book className="w-14 h-14 text-pink-400 mb-4" />
+        <h3 className="text-xl font-bold text-gray-800">No eBooks Yet</h3>
+        <p className="text-gray-500 max-w-sm mt-2 mb-6">
+          You haven't created any eBooks yet. Start building your first one using AI.
+        </p>
+
+        <Button
+          onClick={handleCreateBookClick}
+          icon={Plus}
+          className="bg-pink-600 hover:bg-pink-700 text-white font-semibold px-6 py-3 rounded-xl shadow-md"
+        >
+          Create Your First eBook
+        </Button>
+      </div>
+    ) : (
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        {books.map((book) => (
+          <BookCard
+            key={book._id}
+            book={book}
+            onDelete={() => setBookToDelete(book._id)}
+          />
+        ))}
+      </div>
+    )}
+
+    {/* Delete Confirmation Modal */}
+    <ConfirmationModal
+      isOpen={!!bookToDelete}
+      onClose={() => setBookToDelete(null)}
+      onConfirm={handleDeleteBook}
+      title="Delete eBook"
+      message="Are you sure you want to delete this eBook? This action cannot be undone."
+    />
+
+    {/* Create Book Modal */}
+    <CreateBookModal
+      isOpen={isCreateModalOpen}
+      onClose={() => setIsCreateModalOpen(false)}
+      onBookCreated={handleBookCreated}
+    />
+  </div>
+</DashboardLayout>
+
   );
 };
 
