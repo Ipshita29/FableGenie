@@ -15,18 +15,13 @@ exports.registerUser = async (req, res) => {
   const { name, email, password } = req.body;
 
   try {
-    // Check if all fields are provided
     if (!name || !email || !password) {
       return res.status(400).json({ message: "Please fill all fields" });
     }
-
-    // Check if user already exists
     const userExists = await User.findOne({ email });
     if (userExists) {
       return res.status(400).json({ message: "User already exists" });
     }
-
-    // Create new user
     const user = await User.create({ name, email, password });
 
     if (user) {
@@ -50,10 +45,7 @@ exports.loginUser = async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    // Find user by email and include password field
     const user = await User.findOne({ email }).select("+password");
-
-    // Check if user exists and password matches
     if (user && (await user.matchPassword(password))) {
       res.json({
         message: "Login successful",
@@ -76,7 +68,6 @@ exports.loginUser = async (req, res) => {
 //@access private
 exports.getProfile = async (req, res) => {
   try {
-    // Fetch user by ID from the request (set by authentication middleware)
     const user = await User.findById(req.user.id);
 
     if (!user) {
@@ -106,10 +97,7 @@ exports.updateUserProfile = async (req, res) => {
     const user = await User.findById(req.user.id);
 
     if (user) {
-      // Update user fields if new data is provided
       user.name = req.body.name || user.name;
-
-      // Save the updated user
       const updatedUser = await user.save();
 
       res.json({
