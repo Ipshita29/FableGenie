@@ -7,7 +7,7 @@ import { useAuth } from "../context/AuthContext";
 import axiosInstance from "../utlis/axiosInstance";
 import { API_PATHS } from "../utlis/apiPaths";
 
-import Login from "../assets/login.png";
+import Login from "../assets/Login.png"
 
 const LoginPage = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
