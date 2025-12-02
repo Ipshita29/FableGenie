@@ -1,15 +1,16 @@
 import { useNavigate } from "react-router-dom";
-import { BASE_URL } from "../../utlis/apiPaths";
 import { Edit, Trash, Download } from "lucide-react";
 import axiosInstance from "../../utlis/axiosInstance";
 import { API_PATHS } from "../../utlis/apiPaths";
 import toast from "react-hot-toast";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 const BookCard = ({ book, onDelete }) => {
   const navigate = useNavigate();
 
   const coverImageUrl = book.coverImage
-    ? `${BASE_URL}${book.coverImage}`.replace(/\\/g, "/")
+    ? `${API_URL}${book.coverImage}`.replace(/\\/g, "/")
     : "/no-cover.png";
 
   const handleDownloadPDF = async (e) => {
