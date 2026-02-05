@@ -22,9 +22,6 @@ Leveraging the power of **Google's Generative AI**, users can generate rich, str
 - **File Uploads**  
   Uses **Multer** for handling file uploads (e.g., cover images, assets) to enrich the eBook creation process.
 
-- **Intuitive UI**  
-  Built with **React** and managed with **React Router DOM** for a seamless, multi-page user experience.
-
 ---
 
 ## 🧩 **Tech Stack Overview**
