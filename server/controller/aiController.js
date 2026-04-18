@@ -7,37 +7,48 @@ const generateOutline = async (params) => {
   try {
     const { title, topic, style, numChapters = 5, description } = params;
 
-    if (!topic) {
-      throw new Error("Please provide a topic");
-    }
+    const searchTopic = topic || title || "a general interesting book";
+    const chapterCount = parseInt(numChapters) || 5;
 
     const prompt = `
-You are an expert book outline generator. Create a comprehensive book outline:
-
-Book Title: "${title}"
-Topic: "${topic}"
-Description: "${description}"
-Writing Style: ${style}
-Number of Chapters: ${numChapters}
+You are an expert book outline generator. Create a comprehensive book outline for a book titled "${title}".
+The book is about: "${searchTopic}"
+Description: "${description || 'No description provided.'}"
+Writing Style: ${style || 'Informative'}
+Number of Chapters: ${chapterCount}
 
 Requirements:
-1. Generate exactly ${numChapters} chapters.
-2. Each chapter must have "title" and "content".
-3. Return ONLY a valid JSON object with a "chapters" array.
+1. Generate exactly ${chapterCount} chapters.
+2. Each chapter must have "title" and "content" (a brief summary of what the chapter will cover).
+3. Return ONLY a valid JSON object in this format:
+{
+  "chapters": [
+    { "title": "Chapter 1: ...", "content": "..." },
+    ...
+  ]
+}
 `;
 
+    console.log(`🤖 Generating outline for: "${title}" with model gemini-2.0-flash`);
+
     const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash-lite",
+      model: "gemini-2.0-flash",
       contents: prompt,
     });
 
     const text = response.text;
+    if (!text) {
+      console.error("❌ AI returned empty response");
+      throw new Error("AI returned empty response");
+    }
+
+    console.log("📝 AI Response received, length:", text.length);
 
     // Try to extract JSON safely
     const startIndex = text.indexOf("{");
     const endIndex = text.lastIndexOf("}");
     if (startIndex === -1 || endIndex === -1) {
-      console.error("AI response missing JSON:", text);
+      console.error("❌ AI response missing JSON brackets. Response start:", text.substring(0, 100));
       throw new Error("Failed to parse AI response: no JSON found");
     }
 
@@ -47,17 +58,24 @@ Requirements:
     try {
       outline = JSON.parse(jsonString);
     } catch (err) {
-      console.error("Invalid JSON from AI:", err, jsonString);
+      console.error("❌ Invalid JSON from AI:", err.message);
+      console.error("Full JSON string that failed:", jsonString);
       throw new Error("AI returned invalid JSON");
+    }
+
+    if (!outline.chapters || !Array.isArray(outline.chapters)) {
+      console.error("❌ AI response missing chapters array");
+      throw new Error("AI response missing chapters array");
     }
 
     return outline;
 
   } catch (error) {
-    console.error("Error generating outline:", error.message);
-    throw error; // Let the route/controller handle sending the response
+    console.error("❌ Error generating outline:", error.message);
+    throw error;
   }
 };
+
 
 // @desc    Generate content for a chapter
 // @route   POST /api/ai/generate-chapter-content
@@ -85,7 +103,7 @@ Requirements:
 `;
 
     const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash-lite",
+      model: "gemini-1.5-flash",
       contents: prompt,
     });
 
