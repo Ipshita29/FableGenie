@@ -1,5 +1,8 @@
-const { GoogleGenAI } = require("@google/genai");
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+const Groq = require("groq-sdk");
+
+const groq = new Groq({
+  apiKey: process.env.GROQ_API_KEY,
+});
 
 // @desc    Generate book outline
 // @access  Private
@@ -31,12 +34,17 @@ Requirements:
 
     console.log(`🤖 Generating outline for: "${title}" with model gemini-2.0-flash`);
 
-    const response = await ai.models.generateContent({
-      model: "gemini-2.0-flash",
-      contents: prompt,
+    const response = await groq.chat.completions.create({
+      model: "llama3-8b-8192", // fast + free
+      messages: [
+        {
+          role: "user",
+          content: prompt,
+        },
+      ],
     });
 
-    const text = response.text;
+    const text = response.choices[0]?.message?.content;
     if (!text) {
       console.error("❌ AI returned empty response");
       throw new Error("AI returned empty response");
@@ -102,9 +110,18 @@ Requirements:
 - Do not repeat title or existing content
 `;
 
-    const response = await ai.models.generateContent({
-      model: "gemini-1.5-flash",
-      contents: prompt,
+    const response = await groq.chat.completions.create({
+      model: "llama3-8b-8192",
+      messages: [
+        {
+          role: "user",
+          content: prompt,
+        },
+      ],
+    });
+
+    res.status(200).json({
+      generatedText: response.choices[0]?.message?.content,
     });
 
     res.status(200).json({ generatedText: response.text });
