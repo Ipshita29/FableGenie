@@ -23,4 +23,4 @@ export const API_PATHS = {
     DOC: "/api/export/doc",
   },
 };
-export const BASE_URL = "http://localhost:8000";
+export const BASE_URL = "https://fablegenie.onrender.com";
