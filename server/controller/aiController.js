@@ -35,7 +35,7 @@ Requirements:
     console.log(`🤖 Generating outline for: "${title}" with model gemini-2.0-flash`);
 
     const response = await groq.chat.completions.create({
-      model: "llama3-8b-8192", // fast + free
+      model: "llama-3.1-8b-instant", // fast + free
       messages: [
         {
           role: "user",
@@ -111,7 +111,7 @@ Requirements:
 `;
 
     const response = await groq.chat.completions.create({
-      model: "llama3-8b-8192",
+      model: "llama-3.1-8b-instant",
       messages: [
         {
           role: "user",
