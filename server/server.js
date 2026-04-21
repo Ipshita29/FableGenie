@@ -12,7 +12,7 @@ const app = express();
 // Middleware to handle CORS
 app.use(
   cors({
-    origin: "https://fablegenie-5.onrender.com",
+    origin: ["https://fablegenie-5.onrender.com","http://localhost:5173"],
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
